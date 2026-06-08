@@ -42,4 +42,10 @@ function ports { Get-NetTCPConnection -State Listen | Select-Object LocalPort, @
 # 7. Información del Sistema (Fastfetch)
 if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
     fastfetch
+} else {
+    $ffPath = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\Fastfetch-cli.Fastfetch*\fastfetch.exe"
+    $ffCmd = Resolve-Path $ffPath -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($ffCmd) {
+        & $ffCmd.Path
+    }
 }

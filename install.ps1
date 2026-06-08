@@ -13,7 +13,7 @@ function Install-WingetPackage {
         [string]$Source = "winget"
     )
     Write-Host "Instalando $PackageId..." -ForegroundColor Cyan
-    winget install --id $PackageId -s $Source --exact --accept-package-agreements --accept-source-agreements --silent
+    winget install --id $PackageId -s $Source --accept-package-agreements --accept-source-agreements --silent
     if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189 -and $LASTEXITCODE -ne 2316632065) {
         Write-Host "[ERROR] Falló la instalación de $PackageId. Exit Code: $LASTEXITCODE" -ForegroundColor Red
         exit $LASTEXITCODE
