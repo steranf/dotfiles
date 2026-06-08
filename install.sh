@@ -117,4 +117,4 @@ echo -e "\e[32m=======================================================\e[0m"
 
 # Benchmark opcional de inicio
 echo "Benchmark de inicio de shell:"
-time zsh -i -c exit
+time zsh -i -c exit || true
