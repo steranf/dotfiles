@@ -1,0 +1,28 @@
+# Normalizar line endings a LF en el repo; checkout según el OS
+* text=auto eol=lf
+
+# Scripts siempre LF (se ejecutan en Linux/WSL)
+*.sh    text eol=lf
+*.bash  text eol=lf
+
+# PowerShell: CRLF en Windows, pero LF funciona también
+*.ps1   text eol=lf
+*.psm1  text eol=lf
+*.psd1  text eol=lf
+
+# Configs y texto
+*.json  text eol=lf
+*.md    text eol=lf
+*.lua   text eol=lf
+*.toml  text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.ini   text eol=lf
+
+# Binarios — sin tocar
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.zip   binary
