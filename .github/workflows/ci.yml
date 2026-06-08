@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run ShellCheck
-        run: shellcheck install.sh
+        run: shellcheck install.sh verify.sh
 
   lint-powershell:
     runs-on: ubuntu-latest

@@ -85,7 +85,7 @@ fi
 # 5. Instalar Oh My Zsh y Plugins
 echo -e "\n\e[33m[5/7] Instalando Oh My Zsh y plugins...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
