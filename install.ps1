@@ -22,29 +22,39 @@ function Install-WingetPackage {
 
 # 1. Instalar Software Base (Terminal, PowerShell 7, WSL, AlmaLinux)
 Write-Host "`n[1/6] Instalando Software Base (Terminal, PowerShell 7, WSL, AlmaLinux 9)..." -ForegroundColor Yellow
-Install-WingetPackage -PackageId Microsoft.WindowsTerminal
-Install-WingetPackage -PackageId Microsoft.PowerShell
+$packages = @(
+    "Microsoft.WindowsTerminal",
+    "Microsoft.PowerShell",
+    "9P5RWLM70SN9",
+    "JanDeDobbeleer.OhMyPosh",
+    "junegunn.fzf",
+    "Fastfetch-cli.Fastfetch",
+    "jesseduffield.lazygit",
+    "sharkdp.bat",
+    "Neovim.Neovim",
+    "BurntSushi.ripgrep.MSVC",
+    "sharkdp.fd"
+)
+
+foreach ($pkg in $packages) {
+    if ($pkg -eq "9P5RWLM70SN9") {
+        Install-WingetPackage -PackageId $pkg -Source msstore
+    } else {
+        Install-WingetPackage -PackageId $pkg
+    }
+}
+
 Write-Host "Instalando motor de WSL..." -ForegroundColor Cyan
 wsl --install --no-distribution
-Write-Host "Instalando AlmaLinux 9 desde la Microsoft Store..." -ForegroundColor Cyan
-Install-WingetPackage -PackageId 9P5RWLM70SN9 -Source msstore
 
-# 2. Instalar dependencias con Winget (Oh My Posh, fzf, fastfetch, lazygit, bat)
-Write-Host "`n[2/7] Instalando utilidades (Oh My Posh, fzf, fastfetch, lazygit, bat)..." -ForegroundColor Yellow
-Install-WingetPackage -PackageId JanDeDobbeleer.OhMyPosh
-Install-WingetPackage -PackageId junegunn.fzf
-Install-WingetPackage -PackageId Fastfetch-cli.Fastfetch
-Install-WingetPackage -PackageId jesseduffield.lazygit
-Install-WingetPackage -PackageId sharkdp.bat
-
-# 3. Instalar Módulos de PowerShell
-Write-Host "`n[3/7] Instalando Módulos de PowerShell (Terminal-Icons, PSFzf)..." -ForegroundColor Yellow
+# 2. Instalar Módulos de PowerShell
+Write-Host "`n[2/6] Instalando Módulos de PowerShell (Terminal-Icons, PSFzf)..." -ForegroundColor Yellow
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 Install-Module -Name Terminal-Icons -Force -AllowClobber -ErrorAction SilentlyContinue
 Install-Module -Name PSFzf -Force -AllowClobber -ErrorAction SilentlyContinue
 
-# 4. Configurar Perfil de PowerShell (Con Backup)
-Write-Host "`n[4/7] Restaurando perfil de PowerShell..." -ForegroundColor Yellow
+# 3. Configurar Perfil de PowerShell (Con Backup)
+Write-Host "`n[3/6] Restaurando perfil de PowerShell..." -ForegroundColor Yellow
 if (Test-Path -Path $PROFILE) {
     Copy-Item -Path $PROFILE -Destination "$PROFILE.bak" -Force
 } else {
@@ -53,8 +63,21 @@ if (Test-Path -Path $PROFILE) {
 Copy-Item -Path "$dotfilesDir\windows\Microsoft.PowerShell_profile.ps1" -Destination $PROFILE -Force
 Write-Host "Perfil de PowerShell copiado con éxito." -ForegroundColor Green
 
+# 4. Configurar Neovim (LazyVim)
+Write-Host "`n[4/6] Restaurando configuración de Neovim (LazyVim)..." -ForegroundColor Cyan
+$nvimDest = "$env:LOCALAPPDATA\nvim"
+$nvimSource = "$dotfilesDir\nvim"
+if (Test-Path -Path $nvimSource) {
+    if (Test-Path -Path $nvimDest) {
+        Write-Host "Realizando backup de configuración local de Neovim..." -ForegroundColor Yellow
+        Move-Item -Path $nvimDest -Destination "$nvimDest.bak" -Force
+    }
+    Copy-Item -Path $nvimSource -Destination $nvimDest -Recurse -Force
+    Write-Host "Configuración de Neovim (LazyVim) restaurada desde dotfiles." -ForegroundColor Green
+}
+
 # 5. Configurar Windows Terminal (Con Backup)
-Write-Host "`n[5/7] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow
+Write-Host "`n[5/6] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow
 $wtLocalStateDir = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 if (Test-Path -Path $wtLocalStateDir) {
     if (Test-Path "$wtLocalStateDir\settings.json") {
@@ -64,15 +87,13 @@ if (Test-Path -Path $wtLocalStateDir) {
     try {
         Copy-Item -Path "$dotfilesDir\assets\cyberpunk_terminal_bg.png" -Destination "$wtLocalStateDir\cyberpunk_terminal_bg.png" -Force -ErrorAction Stop
     } catch {
-        Write-Host "Aviso: El fondo de pantalla está en uso por Windows Terminal y no se pudo sobreescribir. (Ignorando)" -ForegroundColor Yellow
+        Write-Host "Aviso: El fondo de pantalla está en uso por Windows Terminal y no se pudo sobreescribir." -ForegroundColor Yellow
     }
     Write-Host "Windows Terminal configurado con éxito." -ForegroundColor Green
-} else {
-    Write-Host "Aviso: No se encontró la ruta de Windows Terminal. Tal vez necesites abrir la app una vez primero." -ForegroundColor Red
 }
 
-# 6. Instalar Fuentes
-Write-Host "`n[6/7] Instalando la fuente JetBrains Mono Nerd Font..." -ForegroundColor Yellow
+# 6. Instalar Fuentes y Temas
+Write-Host "`n[6/6] Instalando fuentes y configurando temas..." -ForegroundColor Yellow
 oh-my-posh font install JetBrainsMono --headless
 Write-Host "Fuentes instaladas." -ForegroundColor Green
 

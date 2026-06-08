@@ -12,6 +12,7 @@ OMP_VERSION="v25.0.0"
 EZA_VERSION="v0.20.2"
 LAZYGIT_VERSION="0.48.0"
 FASTFETCH_VERSION="2.38.0"
+NVIM_VERSION="v0.12.2"
 
 # Detectar arquitectura
 ARCH=$(uname -m)
@@ -20,19 +21,23 @@ if [ "$ARCH" = "x86_64" ]; then
     EZA_ARCH="x86_64"
     LAZYGIT_ARCH="x86_64"
     FASTFETCH_ARCH="amd64"
+    NVIM_ARCH="x86_64"
     OMP_SHA256="61b79c4ea5ab40927875eea2797ef74a2e7ed8d7cf1e2ab74b70c7bf8bab9074"
     EZA_SHA256="a926f4fdc50e85d218d6076b5bd7536f6560d0f4ce5e899c48d9d77c8d83d188"
     LAZYGIT_SHA256="291722c643a10805de3bd7b58f51d5275878269aeadb046709708f8683f558d7"
     FASTFETCH_SHA256="f61abf31129d0b932f47d40f2956df27d174b1f9cc775432bed11bdfbfb76aee"
+    NVIM_SHA256="31cf85945cb600d96cdf69f88bc68bec814acbff50863c5546adef3a1bcef260"
 elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
     OMP_ARCH="arm64"
     EZA_ARCH="aarch64"
     LAZYGIT_ARCH="arm64"
     FASTFETCH_ARCH="aarch64"
+    NVIM_ARCH="arm64"
     OMP_SHA256="dc60d5b5c3eeae998aa3cc9dd5d31f3e892f7a8abed86e843a839479db6f946c"
     EZA_SHA256="720b00b9f1244253600aecbc3377d5e5df886a6d0301d8a3c3ee917961586718"
     LAZYGIT_SHA256="37150ec77bd42d92b7dc96f05fca5f1cd310551936e32556011ac145ccd9d62b"
     FASTFETCH_SHA256="d8067104d7764802209bf760cfc0e72f3e98d37a4c3c2e0700f33f69d2a7547e"
+    NVIM_SHA256="f697d4e4582b6e4b5c3c26e76e06ce26efa08ba1768e03fd2733fcc422bb0490"
 else
     echo -e "\e[31mArquitectura $ARCH no soportada automáticamente.\e[0m"
     exit 1
@@ -42,9 +47,9 @@ fi
 echo -e "\n\e[33m[1/7] Instalando Zsh, EPEL y utilidades...\e[0m"
 sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq file
 
-# 2. Instalar herramientas de EPEL (FZF, Zoxide, Bat)
-echo -e "\n\e[33m[2/7] Instalando FZF, Zoxide y Bat...\e[0m"
-sudo dnf install -y fzf zoxide bat
+# 2. Instalar utilidades adicionales del repositorio (EPEL)
+echo -e "\n\e[33m[2/7] Instalando FZF, Zoxide, Bat y utilidades de desarrollo...\e[0m"
+sudo dnf install -y fzf zoxide bat gcc make ripgrep fd-find
 
 # 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga con validación robusta)
 echo -e "\n\e[33m[3/7] Instalando utilidades desde GitHub releases...\e[0m"
@@ -99,6 +104,14 @@ FF_DIR="fastfetch-linux-${FASTFETCH_ARCH}"
 sudo mv "${FF_DIR}/usr/bin/fastfetch" /usr/local/bin/fastfetch
 sudo chmod +x /usr/local/bin/fastfetch
 
+# Neovim
+echo "Descargando Neovim (${NVIM_VERSION})..."
+wget --https-only -qO nvim.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-${NVIM_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
+file nvim.tar.gz | grep -q 'gzip' || { echo "nvim.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
+verify_sha256 nvim.tar.gz "$NVIM_SHA256"
+tar xzf nvim.tar.gz
+sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
+
 # 4. Cambiar shell predeterminado de forma segura
 echo -e "\n\e[33m[4/7] Configurando Zsh como shell por defecto...\e[0m"
 if command -v zsh >/dev/null 2>&1; then
@@ -129,8 +142,19 @@ if [ -f "$HOME/.zshrc" ]; then
 fi
 cp "$DIR/linux/.zshrc" "$HOME/.zshrc"
 
-# 7. Copiar Tema de Oh My Posh localmente
-echo -e "\n\e[33m[7/7] Instalando tema local de Oh My Posh...\e[0m"
+echo -e "\n\e[33m[7/8] Restaurando configuración de Neovim (LazyVim)...\e[0m"
+if [ -d "$DIR/nvim" ]; then
+    if [ -d "$HOME/.config/nvim" ]; then
+        echo "Realizando backup de configuración local de Neovim..."
+        mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+    fi
+    cp -r "$DIR/nvim" "$HOME/.config/nvim"
+    echo "Configuración de Neovim (LazyVim) restaurada desde dotfiles."
+else
+    echo -e "\e[33m[ADVERTENCIA] No se encontró el directorio nvim en el repositorio.\e[0m"
+fi
+
+echo -e "\n\e[33m[8/8] Instalando tema local de Oh My Posh...\e[0m"
 mkdir -p "$HOME/.config/omp"
 cp "$DIR/themes/catppuccin_mocha.omp.json" "$HOME/.config/omp/catppuccin_mocha.omp.json"
 echo "Tema local de Oh My Posh instalado."

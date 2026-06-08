@@ -40,6 +40,9 @@ Test-Tool "fastfetch" "Fastfetch" { (fastfetch --version).Split(' ')[1] }
 Test-Tool "lazygit" "LazyGit" { (lazygit --version).Split(' ')[5] -replace 'v', '' -replace ',', '' }
 Test-Tool "fzf" "FZF (Buscador)" { (fzf --version).Split(' ')[0] }
 Test-Tool "bat" "Bat" { (bat --version).Split(' ')[1] }
+Test-Tool "nvim" "Neovim" { (nvim --version).Split(' ')[1] }
+Test-Tool "rg" "Ripgrep" { (rg --version).Split(' ')[1] }
+Test-Tool "fd" "Fd" { (fd --version).Split(' ')[1] }
 
 Write-Host "`n====================================================" -ForegroundColor Cyan
 if ($errors -eq 0) {

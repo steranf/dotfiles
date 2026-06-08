@@ -24,6 +24,9 @@ check_tool() {
             "zoxide") version=$(zoxide --version 2>/dev/null | awk '{print $2}') ;;
             "bat"|"batcat") version=$($tool --version 2>/dev/null | awk '{print $2}') ;;
             "eza") version=$(eza --version 2>/dev/null | grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1) ;;
+            "nvim") version=$(nvim --version 2>/dev/null | head -1 | awk '{print $2}') ;;
+            "rg") version=$(rg --version 2>/dev/null | head -1 | awk '{print $2}') ;;
+            "fd"|"fdfind") version=$($tool --version 2>/dev/null | awk '{print $NF}') ;;
         esac
 
         if [ -n "$version" ]; then
@@ -52,6 +55,9 @@ check_tool "fzf" "FZF (Buscador)" || errors+=1
 check_tool "zoxide" "Zoxide" || errors+=1
 check_tool "bat" "Bat (o Batcat)" || check_tool "batcat" "Bat (o Batcat)" || errors+=1
 check_tool "eza" "Eza (Listados)" || errors+=1
+check_tool "nvim" "Neovim" || errors+=1
+check_tool "rg" "Ripgrep" || errors+=1
+check_tool "fd" "Fd" || check_tool "fdfind" "Fd" || errors+=1
 
 echo -e "\n\e[36m====================================================\e[0m"
 if [ $errors -eq 0 ]; then
