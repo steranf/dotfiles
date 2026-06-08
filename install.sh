@@ -44,15 +44,15 @@ else
 fi
 
 # 1. Instalar paquetes base (requiere sudo)
-echo -e "\n\e[33m[1/8] Instalando Zsh, EPEL y utilidades...\e[0m"
+echo -e "\n\e[33m[1/9] Instalando Zsh, EPEL y utilidades...\e[0m"
 sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq file
 
 # 2. Instalar utilidades adicionales del repositorio (EPEL)
-echo -e "\n\e[33m[2/8] Instalando FZF, Zoxide, Bat y utilidades de desarrollo...\e[0m"
+echo -e "\n\e[33m[2/9] Instalando FZF, Zoxide, Bat y utilidades de desarrollo...\e[0m"
 sudo dnf install -y fzf zoxide bat gcc make ripgrep fd-find
 
 # 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga con validación robusta)
-echo -e "\n\e[33m[3/8] Instalando utilidades desde GitHub releases...\e[0m"
+echo -e "\n\e[33m[3/9] Instalando utilidades desde GitHub releases...\e[0m"
 WORK_DIR=$(mktemp -d)
 trap 'rm -rf "$WORK_DIR"' EXIT
 cd "$WORK_DIR"
@@ -113,7 +113,7 @@ tar xzf nvim.tar.gz
 sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
 
 # 4. Cambiar shell predeterminado de forma segura
-echo -e "\n\e[33m[4/8] Configurando Zsh como shell por defecto...\e[0m"
+echo -e "\n\e[33m[4/9] Configurando Zsh como shell por defecto...\e[0m"
 if command -v zsh >/dev/null 2>&1; then
     sudo usermod -s "$(which zsh)" "$USER"
 else
@@ -121,7 +121,7 @@ else
 fi
 
 # 5. Instalar Oh My Zsh y Plugins
-echo -e "\n\e[33m[5/8] Instalando Oh My Zsh y plugins...\e[0m"
+echo -e "\n\e[33m[5/9] Instalando Oh My Zsh y plugins...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 fi
@@ -135,14 +135,14 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 fi
 
 # 6. Restaurar .zshrc
-echo -e "\n\e[33m[6/8] Restaurando perfil .zshrc con backup...\e[0m"
+echo -e "\n\e[33m[6/9] Restaurando perfil .zshrc con backup...\e[0m"
 if [ -f "$HOME/.zshrc" ]; then
     cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
     echo "Backup de .zshrc creado en ~/.zshrc.bak"
 fi
 cp "$DIR/linux/.zshrc" "$HOME/.zshrc"
 
-echo -e "\n\e[33m[7/8] Restaurando configuración de Neovim (LazyVim)...\e[0m"
+echo -e "\n\e[33m[7/9] Restaurando configuración de Neovim (LazyVim)...\e[0m"
 if [ -d "$DIR/nvim" ]; then
     if [ -d "$HOME/.config/nvim" ]; then
         echo "Realizando backup de configuración local de Neovim..."
@@ -154,10 +154,31 @@ else
     echo -e "\e[33m[ADVERTENCIA] No se encontró el directorio nvim en el repositorio.\e[0m"
 fi
 
-echo -e "\n\e[33m[8/8] Instalando tema local de Oh My Posh...\e[0m"
+echo -e "\n\e[33m[8/9] Instalando tema local de Oh My Posh...\e[0m"
 mkdir -p "$HOME/.config/omp"
 cp "$DIR/themes/catppuccin_mocha.omp.json" "$HOME/.config/omp/catppuccin_mocha.omp.json"
 echo "Tema local de Oh My Posh instalado."
+
+# 9. Instalar NVM y Pyenv (herramientas de entorno de usuario)
+echo -e "\n\e[33m[9/9] Instalando NVM y Pyenv...\e[0m"
+
+NVM_INSTALL_VERSION="v0.40.5"
+PYENV_VERSION="v2.7.1"
+
+if [ ! -d "$HOME/.nvm" ]; then
+    echo "Instalando NVM (${NVM_INSTALL_VERSION})..."
+    curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh" | bash
+else
+    echo "NVM ya instalado, omitiendo."
+fi
+
+if [ ! -d "$HOME/.pyenv" ]; then
+    echo "Instalando Pyenv (${PYENV_VERSION})..."
+    git clone --branch "$PYENV_VERSION" --depth 1 \
+        https://github.com/pyenv/pyenv.git "$HOME/.pyenv"
+else
+    echo "Pyenv ya instalado, omitiendo."
+fi
 
 echo -e "\n\e[32m=======================================================\e[0m"
 echo -e "\e[32m¡INSTALACIÓN COMPLETADA EXITOSAMENTE EN WSL!\e[0m"
