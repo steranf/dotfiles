@@ -107,9 +107,18 @@ No pierdas tiempo escribiendo los comandos completos. Usa estos alias preconfigu
 |-------|--------------|
 | `gs`  | `git status` |
 | `ga`  | `git add` |
-| `gc`  | `git commit -m` |
+| `gcm` | `git commit -m` |
 | `gl`  | `git log --oneline --graph --decorate` |
 | `lg`  | `lazygit` |
+
+---
+
+## 10. 🔧 Infraestructura y Diagnóstico
+
+Para tareas de SysAdmin en tus VPS o WSL, tienes atajos directos:
+
+- **Auditoría de Puertos (`ports`)**: Escribe `ports` para ejecutar `ss -tulpn` con privilegios y ver de inmediato qué aplicaciones tienen puertos a la escucha.
+- **Bat (`c`)**: Reemplazo hipervitaminado del comando `cat`. Usa `c archivo.conf` para leer archivos con resaltado de sintaxis, dejando `cat` intacto para el uso en tuberías (`|`).
 
 ---
 

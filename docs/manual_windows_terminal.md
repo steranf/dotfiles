@@ -531,9 +531,10 @@ Para evitar escribir comandos largos constantemente, tienes configurados estos a
 |-------|--------------|
 | `gs`  | `git status` |
 | `ga`  | `git add <archivo>` |
-| `gc`  | `git commit -m "<mensaje>"` |
+| `gcm`  | `git commit -m "<mensaje>"` |
 | `gl`  | `git log --oneline --graph --decorate` |
 | `lg`  | `lazygit` |
+| `ports` | Muestra qué aplicaciones están usando puertos de red locales |
 
 ---
 

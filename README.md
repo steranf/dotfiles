@@ -17,6 +17,8 @@ Este repositorio contiene un entorno de desarrollo de **Nivel Ingeniería (Infra
 - **Alias de Productividad**: Atajos preconfigurados como `gs` (git status), `ga` (git add), `gcm` (git commit) y `gl` (git log).
 - **Zsh & Oh My Zsh**: Motor de terminal para Linux con plugins de autocompletado y resaltado de sintaxis.
 - **Herramientas de Infraestructura**: `bat` (cat con sintaxis), alias como `ports` para revisar conexiones, y detección dinámica de arquitectura (x86_64 / ARM).
+- **Scripts de Auditoría**: Incluye `verify.sh` y `verify.ps1` para validar post-instalación que todas las herramientas existan y funcionen.
+- **Integración Continua (CI)**: Pipeline automatizado con GitHub Actions que usa `ShellCheck` y `PSScriptAnalyzer` para asegurar código de alta calidad en cada actualización.
 
 ---
 
