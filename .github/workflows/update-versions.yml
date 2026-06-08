@@ -1,0 +1,46 @@
+name: Verificar Actualizaciones de Herramientas
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Cada lunes a las 08:00 UTC
+  workflow_dispatch:       # Permite ejecución manual desde la UI de GitHub
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Verificar y actualizar versiones
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x .github/scripts/check-updates.sh
+          .github/scripts/check-updates.sh
+
+      - name: Crear Pull Request con actualizaciones
+        if: steps.check.outputs.updates_found == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b chore/update-tool-versions
+          git add scripts/linux/env.sh
+          git commit -m "chore: actualizar versiones de herramientas pinadas"
+          git push -f origin chore/update-tool-versions
+
+          # Crear PR solo si no existe uno abierto para esta rama
+          if ! gh pr list --head chore/update-tool-versions --state open | grep -q .; then
+            gh pr create \
+              --title "chore: actualizar versiones de herramientas pinadas" \
+              --body "$(printf 'Actualizaciones automáticas detectadas por el workflow semanal.\n\n**Antes de mergear:**\n- Revisar el CHANGELOG de cada herramienta actualizada\n- Verificar que los checksums SHA256 sean correctos')" \
+              --base main
+          else
+            echo "Ya existe un PR abierto — solo se actualizó el commit."
+          fi
