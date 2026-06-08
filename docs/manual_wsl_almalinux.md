@@ -84,6 +84,35 @@ Reemplazo inteligente del clásico comando `cd`. Zoxide aprende de tus hábitos 
 
 ---
 
+## 7. 🚀 Información del Sistema (Fastfetch)
+
+Al igual que en Windows, tu entorno WSL te saludará con la información de los recursos de tu subsistema Linux usando `fastfetch`. 
+Úsalo en cualquier momento escribiendo el comando `fastfetch` para ver métricas de consumo de RAM, versión del kernel y más.
+
+---
+
+## 8. 🌿 Gestión Visual de Git (LazyGit)
+
+Si trabajas con repositorios en WSL, usar la terminal para manejar Git puede ser tedioso. `lazygit` es la solución.
+
+- Escribe **`lg`** en cualquier repositorio para abrir una interfaz visual donde podrás moverte con las flechas, hacer commits con `c`, empujar cambios con `P` y resolver conflictos visualmente.
+
+---
+
+## 9. ⚡ Alias de Productividad (Git)
+
+No pierdas tiempo escribiendo los comandos completos. Usa estos alias preconfigurados:
+
+| Alias | Comando Real |
+|-------|--------------|
+| `gs`  | `git status` |
+| `ga`  | `git add` |
+| `gc`  | `git commit -m` |
+| `gl`  | `git log --oneline --graph --decorate` |
+| `lg`  | `lazygit` |
+
+---
+
 ## 🏷️ Resumen Rápido de Comandos Diarios
 
 | Tarea | Lo que escribías antes | Lo que debes hacer AHORA |

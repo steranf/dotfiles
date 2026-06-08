@@ -502,6 +502,41 @@ Un módulo que intercepta el comando `ls` (Get-ChildItem) para dibujar iconos de
 
 ---
 
+## 18. 🚀 Resumen del Sistema (Fastfetch)
+
+### ¿Qué es?
+`fastfetch` es una herramienta ultrarrápida que muestra el logotipo de tu sistema operativo junto con las estadísticas clave de tu computadora (procesador, memoria, resolución, esquema de color).
+
+### Cómo usarlo
+Se ejecutará **automáticamente** cada vez que abras una nueva pestaña de la terminal. También puedes escribir `fastfetch` en cualquier momento para volver a imprimirlo.
+
+---
+
+## 19. 🌿 Git Visual en la Terminal (LazyGit)
+
+### ¿Qué es?
+Una interfaz de usuario interactiva para manejar Git sin salir de la terminal. Es infinitamente superior a escribir comandos largos de Git para hacer commits, ramas, stashes y merges.
+
+### Atajo
+Escribe `lg` en cualquier carpeta que sea un repositorio de Git.
+(O el comando completo: `lazygit`).
+
+---
+
+## 20. ⚡ Alias de Productividad
+
+Para evitar escribir comandos largos constantemente, tienes configurados estos atajos universales:
+
+| Alias | Comando Real |
+|-------|--------------|
+| `gs`  | `git status` |
+| `ga`  | `git add <archivo>` |
+| `gc`  | `git commit -m "<mensaje>"` |
+| `gl`  | `git log --oneline --graph --decorate` |
+| `lg`  | `lazygit` |
+
+---
+
 ## 🏷️ Referencia Rápida — Todos los Atajos
 
 ### Pestañas
