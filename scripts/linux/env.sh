@@ -44,7 +44,6 @@ else
     exit 1
 fi
 
-export -f verify_sha256
 verify_sha256() {
     local file="$1" expected="$2" actual
     actual=$(sha256sum "$file" | awk '{print $1}')
@@ -55,3 +54,4 @@ verify_sha256() {
     fi
     echo -e "\e[32m[✓] Checksum OK: $(basename "$file")\e[0m"
 }
+export -f verify_sha256

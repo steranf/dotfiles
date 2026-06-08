@@ -9,13 +9,17 @@ Este repositorio contiene un entorno de desarrollo de **Nivel Ingeniería (Infra
 - **Windows Terminal & PowerShell 7**: Instalación automatizada desde cero.
 - **WSL & AlmaLinux 9**: Descarga e instalación silenciosa del motor de Linux y la distribución.
 - **Oh My Posh**: Prompt visual con el tema *Catppuccin Mocha* para Windows y Linux (Cargado localmente para cero latencia).
+- **Neovim (LazyVim)**: Editor de texto de alto rendimiento con configuración LazyVim lista para usar (descargado desde GitHub Releases a versión fija).
 - **Eza / Terminal-Icons**: Reemplazos modernos de `ls` para incluir iconos según el tipo de archivo.
 - **Fzf**: Buscador interactivo difuso para navegar instantáneamente por el historial (`Ctrl+R`) y archivos (`Ctrl+T`).
 - **Zoxide**: Un reemplazo más inteligente para `cd` que aprende tus directorios frecuentes.
 - **Fastfetch**: Muestra un resumen visual de la información de tu sistema cada vez que abres la terminal.
 - **LazyGit**: Interfaz de usuario gráfica en la terminal para manejar Git de forma ultra rápida (usa el comando `lg`).
+- **Ripgrep / Fd**: Búsqueda ultra-rápida de texto en archivos (`rg`) y de archivos por nombre (`fd`), integrados con Neovim.
+- **NVM (Node Version Manager)**: Gestión de versiones de Node.js sin conflictos de permisos.
+- **Pyenv**: Gestión de versiones de Python sin conflictos con el sistema.
 - **Alias de Productividad**: Atajos preconfigurados como `gs` (git status), `ga` (git add), `gcm` (git commit) y `gl` (git log).
-- **Zsh & Oh My Zsh**: Motor de terminal para Linux con plugins de autocompletado y resaltado de sintaxis.
+- **Zsh & Oh My Zsh**: Motor de terminal para Linux con plugins de autocompletado y resaltado de sintaxis (versiones fijas).
 - **Herramientas de Infraestructura**: `bat` (cat con sintaxis), alias como `ports` para revisar conexiones, y detección dinámica de arquitectura (x86_64 / ARM).
 - **Scripts de Auditoría**: Incluye `verify.sh` y `verify.ps1` para validar post-instalación que todas las herramientas existan y funcionen.
 - **Integración Continua (CI)**: Pipeline automatizado con GitHub Actions que usa `ShellCheck` y `PSScriptAnalyzer` para asegurar código de alta calidad en cada actualización.

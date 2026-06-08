@@ -2,7 +2,8 @@
 set -euo pipefail
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
-source "$(dirname "$0")/env.sh"
+_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$_DIR/env.sh"
 
 echo -e "\n\e[33m[*] Configurando Zsh como shell por defecto...\e[0m"
 if command -v zsh >/dev/null 2>&1; then

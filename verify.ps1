@@ -51,3 +51,4 @@ if ($errors -eq 0) {
     Write-Host "Resultado: Se encontraron $errors herramienta(s) faltantes. Revisa tu instalación de Winget." -ForegroundColor Red
 }
 Write-Host "====================================================" -ForegroundColor Cyan
+if ($errors -gt 0) { exit 1 }

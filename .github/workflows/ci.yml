@@ -10,17 +10,26 @@ jobs:
   lint-bash:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Run ShellCheck
-        run: shellcheck install.sh verify.sh
+        run: shellcheck install.sh verify.sh update.sh scripts/linux/*.sh
 
   lint-powershell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Run PSScriptAnalyzer
         shell: pwsh
         run: |
           Invoke-ScriptAnalyzer -Path .\install.ps1 -Recurse -EnableExit -Severity Error
           Invoke-ScriptAnalyzer -Path .\windows\Microsoft.PowerShell_profile.ps1 -Recurse -EnableExit -Severity Error
           Invoke-ScriptAnalyzer -Path .\verify.ps1 -Recurse -EnableExit -Severity Error
+
+  lint-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Validate JSON files
+        run: |
+          jq empty themes/catppuccin_mocha.omp.json
+          jq empty windows/settings.json
