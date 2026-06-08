@@ -23,3 +23,4 @@ jobs:
         run: |
           Invoke-ScriptAnalyzer -Path .\install.ps1 -Recurse -EnableExit -Severity Error
           Invoke-ScriptAnalyzer -Path .\windows\Microsoft.PowerShell_profile.ps1 -Recurse -EnableExit -Severity Error
+          Invoke-ScriptAnalyzer -Path .\verify.ps1 -Recurse -EnableExit -Severity Error

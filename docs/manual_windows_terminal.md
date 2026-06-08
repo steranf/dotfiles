@@ -1,7 +1,7 @@
 # 📖 Manual de Funcionalidades — Windows Terminal
 
-> Archivo de respaldo: [settings.json.bak](file:///c:/Users/steranf/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json.bak)
-> Archivo activo: [settings.json](file:///c:/Users/steranf/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json)
+> Archivo de respaldo: `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json.bak`
+> Archivo activo: `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json`
 
 > [!NOTE]
 > Windows Terminal aplica los cambios de `settings.json` **en tiempo real**. No necesitas reiniciar la aplicación. Si algo no funciona, cierra y vuelve a abrir la terminal.
@@ -588,9 +588,9 @@ Si necesitas volver a tu configuración original:
 copy settings.json.bak settings.json
 ```
 
-Ruta completa:
+Ruta completa (reemplaza `<tu-usuario>` con tu nombre de usuario de Windows):
 ```
-C:\Users\steranf\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\
+C:\Users\<tu-usuario>\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\
 ```
 
 > [!TIP]
