@@ -33,7 +33,7 @@ Install-WingetPackage -PackageId 9P5RWLM70SN9 -Source msstore
 Write-Host "`n[2/7] Instalando utilidades (Oh My Posh, fzf, fastfetch, lazygit, bat)..." -ForegroundColor Yellow
 Install-WingetPackage -PackageId JanDeDobbeleer.OhMyPosh
 Install-WingetPackage -PackageId junegunn.fzf
-Install-WingetPackage -PackageId fastfetch-cli.fastfetch
+Install-WingetPackage -PackageId Fastfetch-cli.Fastfetch
 Install-WingetPackage -PackageId jesseduffield.lazygit
 Install-WingetPackage -PackageId sharkdp.bat
 

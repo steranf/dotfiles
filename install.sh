@@ -69,8 +69,8 @@ if [ -z "$FASTFETCH_URL" ]; then echo "No se pudo obtener URL de Fastfetch"; exi
 wget --https-only -qO fastfetch.tar.gz "$FASTFETCH_URL" || { echo "Descarga falló"; exit 1; }
 file fastfetch.tar.gz | grep -q 'gzip' || { echo "fastfetch.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
 tar xzf fastfetch.tar.gz
-# Extracting exact bin path
-FF_DIR=$(tar -tzf fastfetch.tar.gz | head -1 | cut -f1 -d"/")
+# Extraemos sin hacer pipes peligrosos que provoquen SIGPIPE a tar
+FF_DIR="fastfetch-linux-${FASTFETCH_ARCH}"
 sudo mv "${FF_DIR}/usr/bin/fastfetch" /usr/local/bin/fastfetch
 sudo chmod +x /usr/local/bin/fastfetch
 
