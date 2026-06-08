@@ -7,10 +7,13 @@ Está diseñado para transformar una computadora en blanco en un entorno de desa
 ## 🛠️ Herramientas Incluidas
 - **Windows Terminal & PowerShell 7**: Instalación automatizada desde cero.
 - **WSL & AlmaLinux 9**: Descarga e instalación silenciosa del motor de Linux y la distribución.
-- **Oh My Posh**: Prompt visual con el tema *Catppuccin Mocha* para Windows y Linux.
+- **Oh My Posh**: Prompt visual con el tema *Catppuccin Mocha* para Windows y Linux (Cargado localmente para cero latencia).
 - **Eza / Terminal-Icons**: Reemplazos modernos de `ls` para incluir iconos según el tipo de archivo.
 - **Fzf**: Buscador interactivo difuso para navegar instantáneamente por el historial (`Ctrl+R`) y archivos (`Ctrl+T`).
-- **Zoxide**: Navegación inteligente de directorios (reemplazo de `cd`).
+- **Zoxide**: Un reemplazo más inteligente para `cd` que aprende tus directorios frecuentes.
+- **Fastfetch**: Muestra un resumen visual de la información de tu sistema cada vez que abres la terminal.
+- **LazyGit**: Interfaz de usuario gráfica en la terminal para manejar Git de forma ultra rápida (usa el comando `lg`).
+- **Alias de Productividad**: Atajos preconfigurados como `gs` (git status), `ga` (git add), `gc` (git commit) y `gl` (git log).
 - **Zsh & Oh My Zsh**: Motor de terminal para Linux con plugins de autocompletado y resaltado de sintaxis.
 
 ---
