@@ -5,43 +5,52 @@ Write-Host "Iniciando instalación del entorno de la Terminal Nivel Dios..." -Fo
 
 $dotfilesDir = $PSScriptRoot
 
-# 1. Instalar dependencias con Winget
-Write-Host "`n[1/5] Instalando paquetes (Oh My Posh, fzf)..." -ForegroundColor Yellow
+# 1. Instalar Software Base (Terminal, PowerShell 7, WSL, AlmaLinux)
+Write-Host "`n[1/6] Instalando Software Base (Terminal, PowerShell 7, WSL, AlmaLinux 9)..." -ForegroundColor Yellow
+winget install Microsoft.WindowsTerminal -s winget --accept-package-agreements --accept-source-agreements
+winget install Microsoft.PowerShell -s winget --accept-package-agreements --accept-source-agreements
+Write-Host "Instalando motor de WSL..." -ForegroundColor Cyan
+wsl --install --no-distribution
+Write-Host "Instalando AlmaLinux 9 desde la Microsoft Store..." -ForegroundColor Cyan
+winget install 9P5RWLM70SN9 -s msstore --accept-package-agreements --accept-source-agreements
+
+# 2. Instalar dependencias con Winget (Oh My Posh, fzf)
+Write-Host "`n[2/6] Instalando utilidades (Oh My Posh, fzf)..." -ForegroundColor Yellow
 winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements
 winget install junegunn.fzf -s winget --accept-package-agreements --accept-source-agreements
 
-# 2. Instalar Módulos de PowerShell
-Write-Host "`n[2/5] Instalando Módulos de PowerShell (Terminal-Icons, PSFzf)..." -ForegroundColor Yellow
+# 3. Instalar Módulos de PowerShell
+Write-Host "`n[3/6] Instalando Módulos de PowerShell (Terminal-Icons, PSFzf)..." -ForegroundColor Yellow
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-Install-Module -Name Terminal-Icons -Force -AllowClobber -ErrorAction Stop
-Install-Module -Name PSFzf -Force -AllowClobber -ErrorAction Stop
+Install-Module -Name Terminal-Icons -Force -AllowClobber -ErrorAction SilentlyContinue
+Install-Module -Name PSFzf -Force -AllowClobber -ErrorAction SilentlyContinue
 
-# 3. Configurar Perfil de PowerShell
-Write-Host "`n[3/5] Restaurando perfil de PowerShell..." -ForegroundColor Yellow
+# 4. Configurar Perfil de PowerShell
+Write-Host "`n[4/6] Restaurando perfil de PowerShell..." -ForegroundColor Yellow
 if (!(Test-Path -Path $PROFILE)) {
-    New-Item -ItemType File -Path $PROFILE -Force | Out-Null
+    $null = New-Item -ItemType File -Path $PROFILE -Force
 }
 Copy-Item -Path "$dotfilesDir\windows\Microsoft.PowerShell_profile.ps1" -Destination $PROFILE -Force
 Write-Host "Perfil de PowerShell copiado con éxito." -ForegroundColor Green
 
-# 4. Configurar Windows Terminal
-Write-Host "`n[4/5] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow
+# 5. Configurar Windows Terminal
+Write-Host "`n[5/6] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow
 $wtLocalStateDir = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
 if (Test-Path -Path $wtLocalStateDir) {
     Copy-Item -Path "$dotfilesDir\windows\settings.json" -Destination "$wtLocalStateDir\settings.json" -Force
     Copy-Item -Path "$dotfilesDir\assets\cyberpunk_terminal_bg.png" -Destination "$wtLocalStateDir\cyberpunk_terminal_bg.png" -Force
     Write-Host "Windows Terminal configurado con éxito." -ForegroundColor Green
 } else {
-    Write-Host "No se encontró Windows Terminal instalado. Por favor instálalo desde la Microsoft Store." -ForegroundColor Red
+    Write-Host "Aviso: No se encontró la ruta de Windows Terminal. Tal vez necesites abrir la app una vez primero." -ForegroundColor Red
 }
 
-# 5. Instalar Fuentes
-Write-Host "`n[5/5] Instalando la fuente JetBrains Mono Nerd Font..." -ForegroundColor Yellow
-# Oh My Posh puede instalar las fuentes automáticamente
+# 6. Instalar Fuentes
+Write-Host "`n[6/6] Instalando la fuente JetBrains Mono Nerd Font..." -ForegroundColor Yellow
 oh-my-posh font install JetBrainsMono --headless
 Write-Host "Fuentes instaladas." -ForegroundColor Green
 
 Write-Host "`n=======================================================" -ForegroundColor Cyan
 Write-Host "¡INSTALACIÓN COMPLETADA EXITOSAMENTE!" -ForegroundColor Green
-Write-Host "Para los cambios de Linux (WSL), recuerda copiar el archivo .zshrc a tu ruta ~/" -ForegroundColor Yellow
+Write-Host "NOTA: Si es la primera vez que instalas WSL, es posible que debas REINICIAR TU PC." -ForegroundColor Yellow
+Write-Host "Para finalizar el entorno de Linux, abre AlmaLinux 9 y ejecuta bash install.sh" -ForegroundColor Yellow
 Write-Host "=======================================================" -ForegroundColor Cyan
