@@ -3,6 +3,9 @@
 *.zip
 *.tar.gz
 
+# Documentación interna de Claude Code
+CLAUDE.md
+
 # macOS
 .DS_Store
 
