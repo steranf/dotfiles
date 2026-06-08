@@ -26,36 +26,51 @@ Este repositorio contiene un entorno de desarrollo de **Nivel Ingeniería (Infra
 
 ---
 
+## ⚡ Instalación Rápida (Bootstrap)
+
+> Solo necesitas una terminal abierta. El bootstrap instala `git` si no está presente, clona el repo y lanza el instalador interactivo.
+
+**Linux / WSL2 (AlmaLinux 9, Ubuntu, Debian):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.sh | bash
+```
+
+**Windows — Abre PowerShell como Administrador:**
+```powershell
+irm https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.ps1 | iex
+```
+
+**Modo totalmente desatendido** (sin menú, instala todo automáticamente):
+```bash
+# Linux
+curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.sh | bash -s -- --all
+# Windows
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.ps1))) -All
+```
+
+---
+
 ## ⚠️ Nota Importante sobre WSL y las Fuentes
 Para que los iconos de Oh My Posh y Eza funcionen correctamente dentro de tu distribución Linux en WSL, **debes asegurarte de que tu Windows Terminal esté usando la fuente "JetBrainsMono Nerd Font"** (la cual el script `install.ps1` instalará automáticamente en Windows). De lo contrario, podrías ver "cuadritos" en lugar de iconos.
 
-## 💻 Instalación en Windows
-Si tienes una PC nueva o acabas de formatear:
-1. Asegúrate de tener instalado **Git** (es lo único necesario para descargar esto).
-2. Abre la terminal por defecto de Windows (PowerShell clásico) y clona este repositorio:
-   ```bash
-   git clone https://github.com/steranf/dotfiles.git D:\dotfiles
-   ```
-3. Ejecuta el instalador:
+## 💻 Instalación Manual en Windows
+Si prefieres clonar manualmente antes de ejecutar:
+1. Abre PowerShell clásico y clona el repositorio:
    ```powershell
+   git clone https://github.com/steranf/dotfiles.git D:\dotfiles
    cd D:\dotfiles
    .\install.ps1
    ```
 
 ---
 
-## 🐧 Instalación en Linux (WSL2)
-Una vez configurado Windows, si tienes una máquina de WSL instalada:
-1. Abre tu terminal de Linux.
-2. Entra a la carpeta clonada (WSL puede acceder a los discos de Windows):
-   ```bash
-   cd /mnt/d/dotfiles
-   ```
-3. Ejecuta el instalador para Linux:
-   ```bash
-   bash install.sh
-   ```
-4. Reinicia tu terminal o escribe `zsh`.
+## 🐧 Instalación Manual en Linux (WSL2)
+Si el repo ya está clonado en Windows y quieres ejecutarlo desde WSL:
+```bash
+cd /mnt/d/dotfiles
+bash install.sh
+```
+Reinicia tu terminal o escribe `zsh` al finalizar.
 
 ---
 
