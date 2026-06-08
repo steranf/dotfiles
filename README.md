@@ -1,8 +1,9 @@
 # 🚀 Mis Dotfiles (Terminal Nivel Dios)
 
-Este repositorio contiene la configuración centralizada de mi entorno de desarrollo, abarcando tanto Windows (PowerShell) como Windows Subsystem for Linux (WSL2 con AlmaLinux).
+Este repositorio contiene un entorno de desarrollo de **Nivel Ingeniería (Infraestructura como Código)**. Está diseñado para transformar una computadora en blanco en un entorno profesional en un proceso automatizado y reproducible (tarda entre 10 a 20 minutos dependiendo de tu conexión).
 
-Está diseñado para transformar una computadora en blanco en un entorno de desarrollo profesional con iconos, autocompletado avanzado, y temas visuales unificados en menos de 2 minutos.
+> [!IMPORTANT]
+> **Plataformas Soportadas:** Oficialmente diseñado para **Windows 11** y **WSL2 con AlmaLinux 9**. Otros sistemas como Ubuntu o Debian requerirán adaptación del script de instalación de Linux (`install.sh`) ya que utiliza `dnf`.
 
 ## 🛠️ Herramientas Incluidas
 - **Windows Terminal & PowerShell 7**: Instalación automatizada desde cero.
@@ -13,10 +14,14 @@ Está diseñado para transformar una computadora en blanco en un entorno de desa
 - **Zoxide**: Un reemplazo más inteligente para `cd` que aprende tus directorios frecuentes.
 - **Fastfetch**: Muestra un resumen visual de la información de tu sistema cada vez que abres la terminal.
 - **LazyGit**: Interfaz de usuario gráfica en la terminal para manejar Git de forma ultra rápida (usa el comando `lg`).
-- **Alias de Productividad**: Atajos preconfigurados como `gs` (git status), `ga` (git add), `gc` (git commit) y `gl` (git log).
+- **Alias de Productividad**: Atajos preconfigurados como `gs` (git status), `ga` (git add), `gcm` (git commit) y `gl` (git log).
 - **Zsh & Oh My Zsh**: Motor de terminal para Linux con plugins de autocompletado y resaltado de sintaxis.
+- **Herramientas de Infraestructura**: `bat` (cat con sintaxis), alias como `ports` para revisar conexiones, y detección dinámica de arquitectura (x86_64 / ARM).
 
 ---
+
+## ⚠️ Nota Importante sobre WSL y las Fuentes
+Para que los iconos de Oh My Posh y Eza funcionen correctamente dentro de tu distribución Linux en WSL, **debes asegurarte de que tu Windows Terminal esté usando la fuente "JetBrainsMono Nerd Font"** (la cual el script `install.ps1` instalará automáticamente en Windows). De lo contrario, podrías ver "cuadritos" en lugar de iconos.
 
 ## 💻 Instalación en Windows
 Si tienes una PC nueva o acabas de formatear:

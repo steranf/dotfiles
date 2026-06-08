@@ -1,49 +1,83 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
 echo -e "\e[36mIniciando instalación del entorno en WSL (AlmaLinux 9)...\e[0m"
+
+# Obtener directorio del repositorio
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Cargar versiones fijas
+if [ -f "$DIR/versions.env" ]; then
+    source "$DIR/versions.env"
+else
+    echo -e "\e[31mError: No se encontró versions.env\e[0m"
+    exit 1
+fi
+
+# Detectar arquitectura
+ARCH=$(uname -m)
+if [ "$ARCH" = "x86_64" ]; then
+    OMP_ARCH="amd64"
+    EZA_ARCH="x86_64"
+    LAZYGIT_ARCH="x86_64"
+    FASTFETCH_ARCH="amd64"
+elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    OMP_ARCH="arm64"
+    EZA_ARCH="aarch64"
+    LAZYGIT_ARCH="arm64"
+    FASTFETCH_ARCH="aarch64"
+else
+    echo -e "\e[31mArquitectura $ARCH no soportada automáticamente.\e[0m"
+    exit 1
+fi
 
 # 1. Instalar paquetes base (requiere sudo)
 echo -e "\n\e[33m[1/7] Instalando Zsh, EPEL y utilidades...\e[0m"
 sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq
 
-# 2. Instalar herramientas de EPEL (FZF, Zoxide)
-echo -e "\n\e[33m[2/7] Instalando FZF y Zoxide...\e[0m"
-sudo dnf install -y fzf zoxide
+# 2. Instalar herramientas de EPEL (FZF, Zoxide, Bat)
+echo -e "\n\e[33m[2/7] Instalando FZF, Zoxide y Bat...\e[0m"
+sudo dnf install -y fzf zoxide bat
 
-# 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga Segura)
+# 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga Segura con versiones fijas)
 echo -e "\n\e[33m[3/7] Instalando Oh My Posh, Eza, LazyGit y Fastfetch...\e[0m"
 cd /tmp
 
 # Oh My Posh
-wget -qO oh-my-posh https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64
+echo "Descargando Oh My Posh ($OMP_VERSION)..."
+wget -qO oh-my-posh "https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/${OMP_VERSION}/posh-linux-${OMP_ARCH}"
 sudo mv oh-my-posh /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
 
 # Eza
-wget -qO eza.tar.gz https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz
+echo "Descargando Eza ($EZA_VERSION)..."
+wget -qO eza.tar.gz "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz"
 tar xzf eza.tar.gz
 sudo mv eza /usr/local/bin/eza
 sudo chmod +x /usr/local/bin/eza
 
 # LazyGit
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-if [ -n "$LAZYGIT_VERSION" ]; then
-    wget -qO lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-    tar xzf lazygit.tar.gz lazygit
-    sudo mv lazygit /usr/local/bin/lazygit
-    sudo chmod +x /usr/local/bin/lazygit
-fi
+echo "Descargando LazyGit ($LAZYGIT_VERSION)..."
+wget -qO lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"
+tar xzf lazygit.tar.gz lazygit
+sudo mv lazygit /usr/local/bin/lazygit
+sudo chmod +x /usr/local/bin/lazygit
 
 # Fastfetch
-wget -qO fastfetch.tar.gz https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.tar.gz
+echo "Descargando Fastfetch ($FASTFETCH_VERSION)..."
+wget -qO fastfetch.tar.gz "https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-${FASTFETCH_ARCH}.tar.gz"
 tar xzf fastfetch.tar.gz
-sudo mv fastfetch-linux-amd64/usr/bin/fastfetch /usr/local/bin/fastfetch
+sudo mv fastfetch-linux-${FASTFETCH_ARCH}/usr/bin/fastfetch /usr/local/bin/fastfetch
 sudo chmod +x /usr/local/bin/fastfetch
 
-# 4. Cambiar shell predeterminado
+# 4. Cambiar shell predeterminado de forma segura
 echo -e "\n\e[33m[4/7] Configurando Zsh como shell por defecto...\e[0m"
-sudo usermod -s /bin/zsh $USER
+if command -v zsh >/dev/null 2>&1; then
+    sudo usermod -s "$(which zsh)" "$USER"
+else
+    echo -e "\e[31mError: Zsh no está instalado correctamente.\e[0m"
+fi
 
 # 5. Instalar Oh My Zsh y Plugins
 echo -e "\n\e[33m[5/7] Instalando Oh My Zsh y plugins...\e[0m"
@@ -61,7 +95,6 @@ fi
 
 # 6. Restaurar .zshrc
 echo -e "\n\e[33m[6/7] Restaurando perfil .zshrc con backup...\e[0m"
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 if [ -f "$HOME/.zshrc" ]; then
     cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
     echo "Backup de .zshrc creado en ~/.zshrc.bak"
@@ -78,3 +111,7 @@ echo -e "\n\e[32m=======================================================\e[0m"
 echo -e "\e[32m¡INSTALACIÓN COMPLETADA EXITOSAMENTE EN WSL!\e[0m"
 echo -e "\e[33mPor favor escribe 'zsh' o abre una nueva pestaña para disfrutar de tu entorno.\e[0m"
 echo -e "\e[32m=======================================================\e[0m"
+
+# Benchmark opcional de inicio
+echo "Benchmark de inicio de shell:"
+time zsh -i -c exit

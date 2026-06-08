@@ -28,14 +28,18 @@ if (Get-Module -ListAvailable -Name PSFzf) {
     Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
 }
 
-# 5. Alias de Productividad (Git y otros)
+# 5. Editor y variables de entorno
+$env:EDITOR="nvim"
+
+# 6. Alias de Productividad (Git y otros)
 function gs { git status }
 function ga { git add $args }
-function gc { git commit -m $args }
+function gcm { git commit -m $args }
 function gl { git log --oneline --graph --decorate -n 15 }
 function lg { lazygit }
+function ports { Get-NetTCPConnection -State Listen }
 
-# 6. Información del Sistema (Fastfetch)
+# 7. Información del Sistema (Fastfetch)
 if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
     fastfetch
 }

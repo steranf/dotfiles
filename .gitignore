@@ -1,0 +1,10 @@
+# Archivos temporales y de backup
+*.bak
+*.zip
+*.tar.gz
+
+# macOS
+.DS_Store
+
+# Logs
+*.log

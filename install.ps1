@@ -1,25 +1,41 @@
 # Script de Auto-Instalación de Dotfiles (Windows)
 # Ejecutar este script desde la raíz del repositorio dotfiles
 
+$ErrorActionPreference = 'Stop'
+
 Write-Host "Iniciando instalación del entorno de la Terminal Nivel Dios..." -ForegroundColor Cyan
 
 $dotfilesDir = $PSScriptRoot
 
+function Install-WingetPackage {
+    param (
+        [Parameter(Mandatory=$true)][string]$PackageId,
+        [string]$Source = "winget"
+    )
+    Write-Host "Instalando $PackageId..." -ForegroundColor Cyan
+    winget install --id $PackageId -s $Source --exact --accept-package-agreements --accept-source-agreements --silent
+    if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189 -and $LASTEXITCODE -ne 2316632065) {
+        Write-Host "[ERROR] Falló la instalación de $PackageId. Exit Code: $LASTEXITCODE" -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
+}
+
 # 1. Instalar Software Base (Terminal, PowerShell 7, WSL, AlmaLinux)
 Write-Host "`n[1/6] Instalando Software Base (Terminal, PowerShell 7, WSL, AlmaLinux 9)..." -ForegroundColor Yellow
-winget install Microsoft.WindowsTerminal -s winget --accept-package-agreements --accept-source-agreements
-winget install Microsoft.PowerShell -s winget --accept-package-agreements --accept-source-agreements
+Install-WingetPackage -PackageId Microsoft.WindowsTerminal
+Install-WingetPackage -PackageId Microsoft.PowerShell
 Write-Host "Instalando motor de WSL..." -ForegroundColor Cyan
 wsl --install --no-distribution
 Write-Host "Instalando AlmaLinux 9 desde la Microsoft Store..." -ForegroundColor Cyan
-winget install 9P5RWLM70SN9 -s msstore --accept-package-agreements --accept-source-agreements
+Install-WingetPackage -PackageId 9P5RWLM70SN9 -Source msstore
 
-# 2. Instalar dependencias con Winget (Oh My Posh, fzf, fastfetch, lazygit)
-Write-Host "`n[2/7] Instalando utilidades (Oh My Posh, fzf, fastfetch, lazygit)..." -ForegroundColor Yellow
-winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements
-winget install junegunn.fzf -s winget --accept-package-agreements --accept-source-agreements
-winget install fastfetch-cli.fastfetch -s winget --accept-package-agreements --accept-source-agreements
-winget install jesseduffield.lazygit -s winget --accept-package-agreements --accept-source-agreements
+# 2. Instalar dependencias con Winget (Oh My Posh, fzf, fastfetch, lazygit, bat)
+Write-Host "`n[2/7] Instalando utilidades (Oh My Posh, fzf, fastfetch, lazygit, bat)..." -ForegroundColor Yellow
+Install-WingetPackage -PackageId JanDeDobbeleer.OhMyPosh
+Install-WingetPackage -PackageId junegunn.fzf
+Install-WingetPackage -PackageId fastfetch-cli.fastfetch
+Install-WingetPackage -PackageId jesseduffield.lazygit
+Install-WingetPackage -PackageId sharkdp.bat
 
 # 3. Instalar Módulos de PowerShell
 Write-Host "`n[3/7] Instalando Módulos de PowerShell (Terminal-Icons, PSFzf)..." -ForegroundColor Yellow
@@ -70,3 +86,6 @@ Write-Host "¡INSTALACIÓN COMPLETADA EXITOSAMENTE!" -ForegroundColor Green
 Write-Host "NOTA: Si es la primera vez que instalas WSL, es posible que debas REINICIAR TU PC." -ForegroundColor Yellow
 Write-Host "Para finalizar el entorno de Linux, abre AlmaLinux 9 y ejecuta bash install.sh" -ForegroundColor Yellow
 Write-Host "=======================================================" -ForegroundColor Cyan
+
+Write-Host "`nBenchmark de inicio del entorno de PowerShell:" -ForegroundColor Magenta
+Measure-Command { pwsh -NoProfile -Command exit } | Select-Object TotalMilliseconds

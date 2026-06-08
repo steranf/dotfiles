@@ -107,8 +107,18 @@ source $ZSH/oh-my-zsh.sh
 # PATH for local binaries
 export PATH=$PATH:/usr/local/bin
 
+# Editor por Defecto (Productividad)
+export EDITOR="nvim"
+
+# Integración con WSL (Para AlmaLinux / Ubuntu en Windows)
+if [ -n "$WSL_DISTRO_NAME" ]; then
+    alias explorer='explorer.exe'
+fi
+
 # Búsqueda FZF (Historial con Ctrl+R, Archivos con Ctrl+T)
-source /usr/share/fzf/shell/key-bindings.zsh
+if [ -f /usr/share/fzf/shell/key-bindings.zsh ]; then
+    source /usr/share/fzf/shell/key-bindings.zsh
+fi
 
 # Oh My Posh (Prompt Visual) - Carga Local
 export OMP_CONFIG="$HOME/.config/omp/catppuccin_mocha.omp.json"
@@ -131,9 +141,15 @@ fi
 # Alias de Productividad (Git y otros)
 alias gs='git status'
 alias ga='git add'
-alias gc='git commit -m'
+alias gcm='git commit -m'
 alias gl='git log --oneline --graph --decorate -n 15'
 alias lg='lazygit'
+
+# Infraestructura y Servidores
+alias ports='sudo ss -tulpn'
+if command -v bat >/dev/null 2>&1; then
+    alias cat='bat --paging=never'
+fi
 
 # Información del Sistema (Fastfetch)
 if command -v fastfetch >/dev/null 2>&1; then
