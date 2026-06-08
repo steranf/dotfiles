@@ -61,7 +61,11 @@ if (Test-Path -Path $wtLocalStateDir) {
         Copy-Item -Path "$wtLocalStateDir\settings.json" -Destination "$wtLocalStateDir\settings.json.bak" -Force
     }
     Copy-Item -Path "$dotfilesDir\windows\settings.json" -Destination "$wtLocalStateDir\settings.json" -Force
-    Copy-Item -Path "$dotfilesDir\assets\cyberpunk_terminal_bg.png" -Destination "$wtLocalStateDir\cyberpunk_terminal_bg.png" -Force
+    try {
+        Copy-Item -Path "$dotfilesDir\assets\cyberpunk_terminal_bg.png" -Destination "$wtLocalStateDir\cyberpunk_terminal_bg.png" -Force -ErrorAction Stop
+    } catch {
+        Write-Host "Aviso: El fondo de pantalla está en uso por Windows Terminal y no se pudo sobreescribir. (Ignorando)" -ForegroundColor Yellow
+    }
     Write-Host "Windows Terminal configurado con éxito." -ForegroundColor Green
 } else {
     Write-Host "Aviso: No se encontró la ruta de Windows Terminal. Tal vez necesites abrir la app una vez primero." -ForegroundColor Red
