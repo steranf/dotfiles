@@ -25,15 +25,19 @@ Write-Host "Tema local instalado." -ForegroundColor Green
 
 Write-Host "`n[*] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow
 $wtLocalStateDir = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
-if (Test-Path -Path $wtLocalStateDir) {
-    if (Test-Path "$wtLocalStateDir\settings.json") {
+if (!(Test-Path -Path $wtLocalStateDir)) {
+    $null = New-Item -ItemType Directory -Path $wtLocalStateDir -Force
+}
+
+if (Test-Path "$wtLocalStateDir\settings.json") {
+    if (!(Test-Path "$wtLocalStateDir\settings.json.bak")) {
         Copy-Item -Path "$wtLocalStateDir\settings.json" -Destination "$wtLocalStateDir\settings.json.bak" -Force
     }
-    Copy-Item -Path "$dotfilesDir\windows\settings.json" -Destination "$wtLocalStateDir\settings.json" -Force
-    try {
-        Copy-Item -Path "$dotfilesDir\assets\cyberpunk_terminal_bg.png" -Destination "$wtLocalStateDir\cyberpunk_terminal_bg.png" -Force -ErrorAction Stop
-    } catch {
-        Write-Host "Aviso: El fondo de pantalla está en uso por Windows Terminal y no se pudo sobreescribir." -ForegroundColor Yellow
-    }
-    Write-Host "Windows Terminal configurado con éxito." -ForegroundColor Green
 }
+Copy-Item -Path "$dotfilesDir\windows\settings.json" -Destination "$wtLocalStateDir\settings.json" -Force
+try {
+    Copy-Item -Path "$dotfilesDir\assets\cyberpunk_terminal_bg.png" -Destination "$wtLocalStateDir\cyberpunk_terminal_bg.png" -Force -ErrorAction Stop
+} catch {
+    Write-Host "Aviso: El fondo de pantalla está en uso por Windows Terminal y no se pudo sobreescribir." -ForegroundColor Yellow
+}
+Write-Host "Windows Terminal configurado con éxito." -ForegroundColor Green

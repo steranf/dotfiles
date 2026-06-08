@@ -8,7 +8,7 @@ source "$_DIR/env.sh"
 echo -e "\n\e[33m[*] Instalando utilidades desde GitHub releases...\e[0m"
 WORK_DIR=$(mktemp -d)
 # shellcheck disable=SC2064
-trap "cd '$DIR'; rm -rf '$WORK_DIR'" EXIT
+trap 'cd "$DIR"; rm -rf "$WORK_DIR"' RETURN EXIT
 
 cd "$WORK_DIR" || exit 1
 

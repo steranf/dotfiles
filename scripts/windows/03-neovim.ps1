@@ -9,8 +9,13 @@ $nvimSource = "$dotfilesDir\nvim"
 
 if (Test-Path -Path $nvimSource) {
     if (Test-Path -Path $nvimDest) {
-        Write-Host "Realizando backup de configuración local de Neovim..." -ForegroundColor Yellow
-        Move-Item -Path $nvimDest -Destination "$nvimDest.bak" -Force
+        if (!(Test-Path -Path "$nvimDest.bak")) {
+            Write-Host "Realizando backup de configuración local de Neovim..." -ForegroundColor Yellow
+            Move-Item -Path $nvimDest -Destination "$nvimDest.bak" -Force
+        } else {
+            Write-Host "Backup de Neovim ya existe. Removiendo configuración local..." -ForegroundColor Yellow
+            Remove-Item -Path $nvimDest -Recurse -Force
+        }
     }
     Copy-Item -Path $nvimSource -Destination $nvimDest -Recurse -Force
     Write-Host "Configuración de Neovim (LazyVim) restaurada desde dotfiles." -ForegroundColor Green

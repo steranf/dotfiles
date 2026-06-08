@@ -25,8 +25,12 @@ fi
 
 echo -e "\n\e[33m[*] Restaurando perfil .zshrc con backup...\e[0m"
 if [ -f "$HOME/.zshrc" ]; then
-    cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
-    echo "Backup de .zshrc creado en ~/.zshrc.bak"
+    if [ ! -f "$HOME/.zshrc.bak" ]; then
+        cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
+        echo "Backup de .zshrc creado en ~/.zshrc.bak"
+    else
+        echo "Backup de .zshrc ya existe, omitiendo para evitar sobreescritura."
+    fi
 fi
 cp "$DIR/linux/.zshrc" "$HOME/.zshrc"
 

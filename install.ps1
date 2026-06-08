@@ -38,12 +38,12 @@ while ($true) {
     $opt = Read-Host "Seleccione una opción"
 
     switch ($opt.ToUpper()) {
-        "1" { Invoke-FullInstall; Pause; break }
-        "2" { & "$PSScriptRoot\scripts\windows\01-core.ps1"; Pause }
-        "3" { & "$PSScriptRoot\scripts\windows\02-terminal.ps1"; Pause }
-        "4" { & "$PSScriptRoot\scripts\windows\03-neovim.ps1"; Pause }
-        "5" { & "$PSScriptRoot\scripts\windows\04-wsl.ps1"; Pause }
-        "R" { & "$PSScriptRoot\scripts\windows\99-restore.ps1"; Pause }
+        "1" { try { Invoke-FullInstall } catch { Write-Host "`n[ERROR] $_" -ForegroundColor Red }; Pause; break }
+        "2" { try { & "$PSScriptRoot\scripts\windows\01-core.ps1" } catch { Write-Host "`n[ERROR] $_" -ForegroundColor Red }; Pause }
+        "3" { try { & "$PSScriptRoot\scripts\windows\02-terminal.ps1" } catch { Write-Host "`n[ERROR] $_" -ForegroundColor Red }; Pause }
+        "4" { try { & "$PSScriptRoot\scripts\windows\03-neovim.ps1" } catch { Write-Host "`n[ERROR] $_" -ForegroundColor Red }; Pause }
+        "5" { try { & "$PSScriptRoot\scripts\windows\04-wsl.ps1" } catch { Write-Host "`n[ERROR] $_" -ForegroundColor Red }; Pause }
+        "R" { try { & "$PSScriptRoot\scripts\windows\99-restore.ps1" } catch { Write-Host "`n[ERROR] $_" -ForegroundColor Red }; Pause }
         "Q" { exit }
         default { Write-Host "Opción inválida." -ForegroundColor Red; Start-Sleep -Seconds 1 }
     }

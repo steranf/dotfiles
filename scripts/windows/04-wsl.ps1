@@ -33,7 +33,9 @@ if (-not $Headless) {
 }
 
 if (Test-Path "$env:USERPROFILE\.wslconfig") {
-    Copy-Item "$env:USERPROFILE\.wslconfig" "$env:USERPROFILE\.wslconfig.bak" -Force
+    if (!(Test-Path "$env:USERPROFILE\.wslconfig.bak")) {
+        Copy-Item "$env:USERPROFILE\.wslconfig" "$env:USERPROFILE\.wslconfig.bak" -Force
+    }
 }
 @"
 [wsl2]

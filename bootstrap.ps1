@@ -4,6 +4,7 @@
 
 param([switch]$All)
 
+Set-ExecutionPolicy Bypass -Scope Process -Force -ErrorAction SilentlyContinue
 $ErrorActionPreference = 'Stop'
 
 $RepoUrl = "https://github.com/steranf/dotfiles.git"
