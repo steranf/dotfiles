@@ -147,8 +147,10 @@ alias lg='lazygit'
 
 # Infraestructura y Servidores
 alias ports='sudo ss -tulpn'
-if command -v bat >/dev/null 2>&1; then
-    alias cat='bat --paging=never'
+if command -v batcat >/dev/null 2>&1; then
+    alias c='batcat --paging=never'
+elif command -v bat >/dev/null 2>&1; then
+    alias c='bat --paging=never'
 fi
 
 # Información del Sistema (Fastfetch)

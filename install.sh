@@ -7,14 +7,6 @@ echo -e "\e[36mIniciando instalación del entorno en WSL (AlmaLinux 9)...\e[0m"
 # Obtener directorio del repositorio
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# Cargar versiones fijas
-if [ -f "$DIR/versions.env" ]; then
-    source "$DIR/versions.env"
-else
-    echo -e "\e[31mError: No se encontró versions.env\e[0m"
-    exit 1
-fi
-
 # Detectar arquitectura
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
@@ -34,41 +26,52 @@ fi
 
 # 1. Instalar paquetes base (requiere sudo)
 echo -e "\n\e[33m[1/7] Instalando Zsh, EPEL y utilidades...\e[0m"
-sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq
+sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq file
 
 # 2. Instalar herramientas de EPEL (FZF, Zoxide, Bat)
 echo -e "\n\e[33m[2/7] Instalando FZF, Zoxide y Bat...\e[0m"
 sudo dnf install -y fzf zoxide bat
 
-# 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga Segura con versiones fijas)
-echo -e "\n\e[33m[3/7] Instalando Oh My Posh, Eza, LazyGit y Fastfetch...\e[0m"
+# 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga con validación robusta)
+echo -e "\n\e[33m[3/7] Instalando utilidades desde GitHub releases...\e[0m"
 cd /tmp
 
 # Oh My Posh
-echo "Descargando Oh My Posh ($OMP_VERSION)..."
-wget -qO oh-my-posh "https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/${OMP_VERSION}/posh-linux-${OMP_ARCH}"
+echo "Descargando Oh My Posh (latest)..."
+wget --https-only -qO oh-my-posh "https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-${OMP_ARCH}" || { echo "Descarga falló"; exit 1; }
+file oh-my-posh | grep -q 'ELF' || { echo "oh-my-posh no es un ejecutable válido (posible 404)"; exit 1; }
 sudo mv oh-my-posh /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
 
 # Eza
-echo "Descargando Eza ($EZA_VERSION)..."
-wget -qO eza.tar.gz "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz"
+echo "Descargando Eza (latest)..."
+wget --https-only -qO eza.tar.gz "https://github.com/eza-community/eza/releases/latest/download/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz" || { echo "Descarga falló"; exit 1; }
+file eza.tar.gz | grep -q 'gzip' || { echo "eza.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
 tar xzf eza.tar.gz
 sudo mv eza /usr/local/bin/eza
 sudo chmod +x /usr/local/bin/eza
 
 # LazyGit
-echo "Descargando LazyGit ($LAZYGIT_VERSION)..."
-wget -qO lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"
+echo "Descargando LazyGit (latest)..."
+# LazyGit release naming is tricky via latest/download directly due to version in filename, so we fetch the tag first via API.
+LAZY_URL=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Eo "https://github.com/jesseduffield/lazygit/releases/download/[^\"]+Linux_${LAZYGIT_ARCH}.tar.gz")
+if [ -z "$LAZY_URL" ]; then echo "No se pudo obtener URL de LazyGit"; exit 1; fi
+wget --https-only -qO lazygit.tar.gz "$LAZY_URL" || { echo "Descarga falló"; exit 1; }
+file lazygit.tar.gz | grep -q 'gzip' || { echo "lazygit.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
 tar xzf lazygit.tar.gz lazygit
 sudo mv lazygit /usr/local/bin/lazygit
 sudo chmod +x /usr/local/bin/lazygit
 
 # Fastfetch
-echo "Descargando Fastfetch ($FASTFETCH_VERSION)..."
-wget -qO fastfetch.tar.gz "https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-${FASTFETCH_ARCH}.tar.gz"
+echo "Descargando Fastfetch (latest)..."
+FASTFETCH_URL=$(curl -s "https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest" | grep -Eo "https://github.com/fastfetch-cli/fastfetch/releases/download/[^\"]+linux-${FASTFETCH_ARCH}.tar.gz")
+if [ -z "$FASTFETCH_URL" ]; then echo "No se pudo obtener URL de Fastfetch"; exit 1; fi
+wget --https-only -qO fastfetch.tar.gz "$FASTFETCH_URL" || { echo "Descarga falló"; exit 1; }
+file fastfetch.tar.gz | grep -q 'gzip' || { echo "fastfetch.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
 tar xzf fastfetch.tar.gz
-sudo mv fastfetch-linux-${FASTFETCH_ARCH}/usr/bin/fastfetch /usr/local/bin/fastfetch
+# Extracting exact bin path
+FF_DIR=$(tar -tzf fastfetch.tar.gz | head -1 | cut -f1 -d"/")
+sudo mv "${FF_DIR}/usr/bin/fastfetch" /usr/local/bin/fastfetch
 sudo chmod +x /usr/local/bin/fastfetch
 
 # 4. Cambiar shell predeterminado de forma segura

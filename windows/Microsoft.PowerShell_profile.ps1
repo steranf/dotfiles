@@ -37,7 +37,7 @@ function ga { git add $args }
 function gcm { git commit -m $args }
 function gl { git log --oneline --graph --decorate -n 15 }
 function lg { lazygit }
-function ports { Get-NetTCPConnection -State Listen }
+function ports { Get-NetTCPConnection -State Listen | Select-Object LocalPort, @{N='Process';E={(Get-Process -Id $_.OwningProcess).Name}} }
 
 # 7. Información del Sistema (Fastfetch)
 if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
