@@ -44,15 +44,15 @@ else
 fi
 
 # 1. Instalar paquetes base (requiere sudo)
-echo -e "\n\e[33m[1/7] Instalando Zsh, EPEL y utilidades...\e[0m"
+echo -e "\n\e[33m[1/8] Instalando Zsh, EPEL y utilidades...\e[0m"
 sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq file
 
 # 2. Instalar utilidades adicionales del repositorio (EPEL)
-echo -e "\n\e[33m[2/7] Instalando FZF, Zoxide, Bat y utilidades de desarrollo...\e[0m"
+echo -e "\n\e[33m[2/8] Instalando FZF, Zoxide, Bat y utilidades de desarrollo...\e[0m"
 sudo dnf install -y fzf zoxide bat gcc make ripgrep fd-find
 
 # 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga con validación robusta)
-echo -e "\n\e[33m[3/7] Instalando utilidades desde GitHub releases...\e[0m"
+echo -e "\n\e[33m[3/8] Instalando utilidades desde GitHub releases...\e[0m"
 WORK_DIR=$(mktemp -d)
 trap 'rm -rf "$WORK_DIR"' EXIT
 cd "$WORK_DIR"
@@ -113,7 +113,7 @@ tar xzf nvim.tar.gz
 sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
 
 # 4. Cambiar shell predeterminado de forma segura
-echo -e "\n\e[33m[4/7] Configurando Zsh como shell por defecto...\e[0m"
+echo -e "\n\e[33m[4/8] Configurando Zsh como shell por defecto...\e[0m"
 if command -v zsh >/dev/null 2>&1; then
     sudo usermod -s "$(which zsh)" "$USER"
 else
@@ -121,7 +121,7 @@ else
 fi
 
 # 5. Instalar Oh My Zsh y Plugins
-echo -e "\n\e[33m[5/7] Instalando Oh My Zsh y plugins...\e[0m"
+echo -e "\n\e[33m[5/8] Instalando Oh My Zsh y plugins...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 fi
@@ -135,7 +135,7 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 fi
 
 # 6. Restaurar .zshrc
-echo -e "\n\e[33m[6/7] Restaurando perfil .zshrc con backup...\e[0m"
+echo -e "\n\e[33m[6/8] Restaurando perfil .zshrc con backup...\e[0m"
 if [ -f "$HOME/.zshrc" ]; then
     cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
     echo "Backup de .zshrc creado en ~/.zshrc.bak"
