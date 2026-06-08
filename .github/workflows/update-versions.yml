@@ -39,7 +39,7 @@ jobs:
           if ! gh pr list --head chore/update-tool-versions --state open | grep -q .; then
             gh pr create \
               --title "chore: actualizar versiones de herramientas pinadas" \
-              --body "$(printf 'Actualizaciones automáticas detectadas por el workflow semanal.\n\n**Antes de mergear:**\n- Revisar el CHANGELOG de cada herramienta actualizada\n- Verificar que los checksums SHA256 sean correctos')" \
+              --body "$(printf 'Actualizaciones automáticas detectadas por el workflow semanal.\n\n> [!CAUTION]\n> **ALERTA DE CADENA DE SUMINISTRO (SUPPLY CHAIN):**\n> Este Pull Request fue autogenerado descargando el último release de GitHub. Si el repositorio origen fue vulnerado, el hash SHA256 también pertenecerá al malware.\n> **OBLIGATORIO:** Verifica las notas del release oficial y confirma que no haya reportes de hackeo antes de hacer Merge.\n\n**Acciones Requeridas:**\n- Revisar el CHANGELOG de cada herramienta\n- Verificar que los checksums coincidan con firmas GPG si están disponibles')" \
               --base main
           else
             echo "Ya existe un PR abierto — solo se actualizó el commit."

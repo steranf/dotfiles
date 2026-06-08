@@ -5,6 +5,7 @@
 # Directorio  : curl -fsSL ...bootstrap.sh | bash -s -- --dir ~/mis-dotfiles
 
 set -euo pipefail
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # --- Colores ---
 RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'

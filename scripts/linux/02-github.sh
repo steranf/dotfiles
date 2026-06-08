@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
 _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -18,6 +19,7 @@ wget --https-only -qO oh-my-posh "https://github.com/JanDeDobbeleer/oh-my-posh/r
 file oh-my-posh | grep -q 'ELF' || { echo "oh-my-posh no es un ejecutable válido"; exit 1; }
 verify_sha256 oh-my-posh "$OMP_SHA256"
 sudo mv oh-my-posh /usr/local/bin/oh-my-posh
+sudo chown root:root /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
 
 # Eza
@@ -27,6 +29,7 @@ file eza.tar.gz | grep -q 'gzip' || { echo "eza.tar.gz no es un tar.gz válido";
 verify_sha256 eza.tar.gz "$EZA_SHA256"
 tar xzf eza.tar.gz
 sudo mv eza /usr/local/bin/eza
+sudo chown root:root /usr/local/bin/eza
 sudo chmod +x /usr/local/bin/eza
 
 # LazyGit
@@ -36,6 +39,7 @@ file lazygit.tar.gz | grep -q 'gzip' || { echo "lazygit.tar.gz no es un tar.gz v
 verify_sha256 lazygit.tar.gz "$LAZYGIT_SHA256"
 tar xzf lazygit.tar.gz lazygit
 sudo mv lazygit /usr/local/bin/lazygit
+sudo chown root:root /usr/local/bin/lazygit
 sudo chmod +x /usr/local/bin/lazygit
 
 # Fastfetch
@@ -46,6 +50,7 @@ verify_sha256 fastfetch.tar.gz "$FASTFETCH_SHA256"
 tar xzf fastfetch.tar.gz
 FF_DIR="fastfetch-linux-${FASTFETCH_ARCH}"
 sudo mv "${FF_DIR}/usr/bin/fastfetch" /usr/local/bin/fastfetch
+sudo chown root:root /usr/local/bin/fastfetch
 sudo chmod +x /usr/local/bin/fastfetch
 
 # Neovim
@@ -55,3 +60,4 @@ file nvim.tar.gz | grep -q 'gzip' || { echo "nvim.tar.gz no es un tar.gz válido
 verify_sha256 nvim.tar.gz "$NVIM_SHA256"
 tar xzf nvim.tar.gz
 sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
+sudo chown -R root:root /usr/local/bin/nvim /usr/local/lib/nvim /usr/local/share/nvim
