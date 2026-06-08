@@ -8,8 +8,7 @@ source "$_DIR/env.sh"
 
 echo -e "\n\e[33m[*] Instalando utilidades desde GitHub releases...\e[0m"
 WORK_DIR=$(mktemp -d)
-# shellcheck disable=SC2064
-trap 'cd "$DIR"; rm -rf "$WORK_DIR"' RETURN EXIT
+trap 'cd "$_DIR"; rm -rf "$WORK_DIR"' EXIT
 
 cd "$WORK_DIR" || exit 1
 
@@ -60,4 +59,6 @@ file nvim.tar.gz | grep -q 'gzip' || { echo "nvim.tar.gz no es un tar.gz válido
 verify_sha256 nvim.tar.gz "$NVIM_SHA256"
 tar xzf nvim.tar.gz
 sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
-sudo chown -R root:root /usr/local/bin/nvim /usr/local/lib/nvim /usr/local/share/nvim
+sudo chown root:root /usr/local/bin/nvim
+[ -d /usr/local/lib/nvim ]   && sudo chown -R root:root /usr/local/lib/nvim
+[ -d /usr/local/share/nvim ] && sudo chown -R root:root /usr/local/share/nvim
