@@ -2,8 +2,6 @@
 set -euo pipefail
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
-echo -e "\e[36mIniciando instalación del entorno en WSL (AlmaLinux 9)...\e[0m"
-
 # Obtener directorio del repositorio
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
@@ -43,20 +41,6 @@ else
     exit 1
 fi
 
-# 1. Instalar paquetes base (requiere sudo)
-echo -e "\n\e[33m[1/9] Instalando Zsh, EPEL y utilidades...\e[0m"
-sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq file
-
-# 2. Instalar utilidades adicionales del repositorio (EPEL)
-echo -e "\n\e[33m[2/9] Instalando FZF, Zoxide, Bat y utilidades de desarrollo...\e[0m"
-sudo dnf install -y fzf zoxide bat gcc make ripgrep fd-find
-
-# 3. Instalar Oh My Posh, Eza, LazyGit y Fastfetch (Descarga con validación robusta)
-echo -e "\n\e[33m[3/9] Instalando utilidades desde GitHub releases...\e[0m"
-WORK_DIR=$(mktemp -d)
-trap 'rm -rf "$WORK_DIR"' EXIT
-cd "$WORK_DIR"
-
 verify_sha256() {
     local file="$1" expected="$2" actual
     actual=$(sha256sum "$file" | awk '{print $1}')
@@ -68,123 +52,207 @@ verify_sha256() {
     echo -e "\e[32m[✓] Checksum OK: $(basename "$file")\e[0m"
 }
 
-# Oh My Posh
-echo "Descargando Oh My Posh (${OMP_VERSION})..."
-wget --https-only -qO oh-my-posh "https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/${OMP_VERSION}/posh-linux-${OMP_ARCH}" || { echo "Descarga falló"; exit 1; }
-file oh-my-posh | grep -q 'ELF' || { echo "oh-my-posh no es un ejecutable válido (posible 404)"; exit 1; }
-verify_sha256 oh-my-posh "$OMP_SHA256"
-sudo mv oh-my-posh /usr/local/bin/oh-my-posh
-sudo chmod +x /usr/local/bin/oh-my-posh
+function install_base_packages {
+    echo -e "\n\e[33m[*] Instalando Zsh, EPEL y utilidades base...\e[0m"
+    sudo dnf install -y epel-release zsh git curl wget unzip tar util-linux-user jq file fzf zoxide bat gcc make ripgrep fd-find
+}
 
-# Eza
-echo "Descargando Eza (${EZA_VERSION})..."
-wget --https-only -qO eza.tar.gz "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz" || { echo "Descarga falló"; exit 1; }
-file eza.tar.gz | grep -q 'gzip' || { echo "eza.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
-verify_sha256 eza.tar.gz "$EZA_SHA256"
-tar xzf eza.tar.gz
-sudo mv eza /usr/local/bin/eza
-sudo chmod +x /usr/local/bin/eza
+function install_github_tools {
+    echo -e "\n\e[33m[*] Instalando utilidades desde GitHub releases...\e[0m"
+    local WORK_DIR
+    WORK_DIR=$(mktemp -d)
+    
+    cd "$WORK_DIR" || exit 1
 
-# LazyGit
-echo "Descargando LazyGit (v${LAZYGIT_VERSION})..."
-wget --https-only -qO lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
-file lazygit.tar.gz | grep -q 'gzip' || { echo "lazygit.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
-verify_sha256 lazygit.tar.gz "$LAZYGIT_SHA256"
-tar xzf lazygit.tar.gz lazygit
-sudo mv lazygit /usr/local/bin/lazygit
-sudo chmod +x /usr/local/bin/lazygit
+    # Oh My Posh
+    echo "Descargando Oh My Posh (${OMP_VERSION})..."
+    wget --https-only -qO oh-my-posh "https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/${OMP_VERSION}/posh-linux-${OMP_ARCH}" || { echo "Descarga falló"; exit 1; }
+    file oh-my-posh | grep -q 'ELF' || { echo "oh-my-posh no es un ejecutable válido"; exit 1; }
+    verify_sha256 oh-my-posh "$OMP_SHA256"
+    sudo mv oh-my-posh /usr/local/bin/oh-my-posh
+    sudo chmod +x /usr/local/bin/oh-my-posh
 
-# Fastfetch
-echo "Descargando Fastfetch (${FASTFETCH_VERSION})..."
-wget --https-only -qO fastfetch.tar.gz "https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-${FASTFETCH_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
-file fastfetch.tar.gz | grep -q 'gzip' || { echo "fastfetch.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
-verify_sha256 fastfetch.tar.gz "$FASTFETCH_SHA256"
-tar xzf fastfetch.tar.gz
-FF_DIR="fastfetch-linux-${FASTFETCH_ARCH}"
-sudo mv "${FF_DIR}/usr/bin/fastfetch" /usr/local/bin/fastfetch
-sudo chmod +x /usr/local/bin/fastfetch
+    # Eza
+    echo "Descargando Eza (${EZA_VERSION})..."
+    wget --https-only -qO eza.tar.gz "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz" || { echo "Descarga falló"; exit 1; }
+    file eza.tar.gz | grep -q 'gzip' || { echo "eza.tar.gz no es un tar.gz válido"; exit 1; }
+    verify_sha256 eza.tar.gz "$EZA_SHA256"
+    tar xzf eza.tar.gz
+    sudo mv eza /usr/local/bin/eza
+    sudo chmod +x /usr/local/bin/eza
 
-# Neovim
-echo "Descargando Neovim (${NVIM_VERSION})..."
-wget --https-only -qO nvim.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-${NVIM_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
-file nvim.tar.gz | grep -q 'gzip' || { echo "nvim.tar.gz no es un tar.gz válido (posible 404)"; exit 1; }
-verify_sha256 nvim.tar.gz "$NVIM_SHA256"
-tar xzf nvim.tar.gz
-sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
+    # LazyGit
+    echo "Descargando LazyGit (v${LAZYGIT_VERSION})..."
+    wget --https-only -qO lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
+    file lazygit.tar.gz | grep -q 'gzip' || { echo "lazygit.tar.gz no es un tar.gz válido"; exit 1; }
+    verify_sha256 lazygit.tar.gz "$LAZYGIT_SHA256"
+    tar xzf lazygit.tar.gz lazygit
+    sudo mv lazygit /usr/local/bin/lazygit
+    sudo chmod +x /usr/local/bin/lazygit
 
-# 4. Cambiar shell predeterminado de forma segura
-echo -e "\n\e[33m[4/9] Configurando Zsh como shell por defecto...\e[0m"
-if command -v zsh >/dev/null 2>&1; then
-    sudo usermod -s "$(which zsh)" "$USER"
-else
-    echo -e "\e[31mError: Zsh no está instalado correctamente.\e[0m"
-fi
+    # Fastfetch
+    echo "Descargando Fastfetch (${FASTFETCH_VERSION})..."
+    wget --https-only -qO fastfetch.tar.gz "https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-${FASTFETCH_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
+    file fastfetch.tar.gz | grep -q 'gzip' || { echo "fastfetch.tar.gz no es un tar.gz válido"; exit 1; }
+    verify_sha256 fastfetch.tar.gz "$FASTFETCH_SHA256"
+    tar xzf fastfetch.tar.gz
+    local FF_DIR="fastfetch-linux-${FASTFETCH_ARCH}"
+    sudo mv "${FF_DIR}/usr/bin/fastfetch" /usr/local/bin/fastfetch
+    sudo chmod +x /usr/local/bin/fastfetch
 
-# 5. Instalar Oh My Zsh y Plugins
-echo -e "\n\e[33m[5/9] Instalando Oh My Zsh y plugins...\e[0m"
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
-fi
+    # Neovim
+    echo "Descargando Neovim (${NVIM_VERSION})..."
+    wget --https-only -qO nvim.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-${NVIM_ARCH}.tar.gz" || { echo "Descarga falló"; exit 1; }
+    file nvim.tar.gz | grep -q 'gzip' || { echo "nvim.tar.gz no es un tar.gz válido"; exit 1; }
+    verify_sha256 nvim.tar.gz "$NVIM_SHA256"
+    tar xzf nvim.tar.gz
+    sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
+    
+    cd "$DIR"
+    rm -rf "$WORK_DIR"
+}
 
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-fi
-
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-fi
-
-# 6. Restaurar .zshrc
-echo -e "\n\e[33m[6/9] Restaurando perfil .zshrc con backup...\e[0m"
-if [ -f "$HOME/.zshrc" ]; then
-    cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
-    echo "Backup de .zshrc creado en ~/.zshrc.bak"
-fi
-cp "$DIR/linux/.zshrc" "$HOME/.zshrc"
-
-echo -e "\n\e[33m[7/9] Restaurando configuración de Neovim (LazyVim)...\e[0m"
-if [ -d "$DIR/nvim" ]; then
-    if [ -d "$HOME/.config/nvim" ]; then
-        echo "Realizando backup de configuración local de Neovim..."
-        mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+function configure_zsh {
+    echo -e "\n\e[33m[*] Configurando Zsh como shell por defecto...\e[0m"
+    if command -v zsh >/dev/null 2>&1; then
+        sudo usermod -s "$(which zsh)" "$USER"
+    else
+        echo -e "\e[31mError: Zsh no está instalado correctamente.\e[0m"
     fi
-    cp -r "$DIR/nvim" "$HOME/.config/nvim"
-    echo "Configuración de Neovim (LazyVim) restaurada desde dotfiles."
-else
-    echo -e "\e[33m[ADVERTENCIA] No se encontró el directorio nvim en el repositorio.\e[0m"
+
+    echo -e "\n\e[33m[*] Instalando Oh My Zsh y plugins...\e[0m"
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+    fi
+    if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
+        git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    fi
+    if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    fi
+
+    echo -e "\n\e[33m[*] Restaurando perfil .zshrc con backup...\e[0m"
+    if [ -f "$HOME/.zshrc" ]; then
+        cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
+        echo "Backup de .zshrc creado en ~/.zshrc.bak"
+    fi
+    cp "$DIR/linux/.zshrc" "$HOME/.zshrc"
+
+    echo -e "\n\e[33m[*] Instalando tema local de Oh My Posh...\e[0m"
+    mkdir -p "$HOME/.config/omp"
+    cp "$DIR/themes/catppuccin_mocha.omp.json" "$HOME/.config/omp/catppuccin_mocha.omp.json"
+}
+
+function configure_neovim {
+    echo -e "\n\e[33m[*] Restaurando configuración de Neovim (LazyVim)...\e[0m"
+    if [ -d "$DIR/nvim" ]; then
+        if [ -d "$HOME/.config/nvim" ]; then
+            echo "Realizando backup de configuración local de Neovim..."
+            mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+        fi
+        cp -r "$DIR/nvim" "$HOME/.config/nvim"
+        echo "Configuración de Neovim (LazyVim) restaurada desde dotfiles."
+    else
+        echo -e "\e[33m[ADVERTENCIA] No se encontró el directorio nvim en el repositorio.\e[0m"
+    fi
+}
+
+function install_nvm_pyenv {
+    echo -e "\n\e[33m[*] Instalando NVM y Pyenv...\e[0m"
+    local NVM_INSTALL_VERSION="v0.40.5"
+    local PYENV_VERSION="v2.7.1"
+
+    if [ ! -d "$HOME/.nvm" ]; then
+        echo "Instalando NVM (${NVM_INSTALL_VERSION})..."
+        curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh" | bash
+    else
+        echo "NVM ya instalado, omitiendo."
+    fi
+
+    if [ ! -d "$HOME/.pyenv" ]; then
+        echo "Instalando Pyenv (${PYENV_VERSION})..."
+        git clone --branch "$PYENV_VERSION" --depth 1 https://github.com/pyenv/pyenv.git "$HOME/.pyenv"
+    else
+        echo "Pyenv ya instalado, omitiendo."
+    fi
+}
+
+function restore_backups {
+    echo -e "\n\e[35m[*] Revirtiendo configuraciones a su estado original...\e[0m"
+    
+    # Restaurar .zshrc
+    if [ -f "$HOME/.zshrc.bak" ]; then
+        cp "$HOME/.zshrc.bak" "$HOME/.zshrc"
+        echo -e "\e[32m[OK] Perfil .zshrc restaurado.\e[0m"
+    fi
+
+    # Restaurar Neovim config
+    if [ -d "$HOME/.config/nvim.bak" ]; then
+        rm -rf "$HOME/.config/nvim"
+        mv "$HOME/.config/nvim.bak" "$HOME/.config/nvim"
+        echo -e "\e[32m[OK] Configuración de Neovim restaurada.\e[0m"
+    elif [ -d "$HOME/.config/nvim" ]; then
+        rm -rf "$HOME/.config/nvim"
+        echo -e "\e[32m[OK] Configuración de Neovim eliminada.\e[0m"
+    fi
+
+    # Restaurar default shell a bash
+    if command -v bash >/dev/null 2>&1; then
+        sudo usermod -s "$(which bash)" "$USER"
+        echo -e "\e[32m[OK] Shell por defecto revertida a bash.\e[0m"
+    fi
+
+    # Remover binarios descargados por Github Releases
+    sudo rm -f /usr/local/bin/oh-my-posh /usr/local/bin/eza /usr/local/bin/lazygit /usr/local/bin/fastfetch /usr/local/bin/nvim
+    echo -e "\e[32m[OK] Ejecutables de GitHub Releases eliminados.\e[0m"
+    
+    echo -e "\n\e[33mLa desinstalación ha concluido. Para reiniciar tu entorno por completo, por favor reinicia WSL ('wsl --shutdown' en Windows).\e[0m"
+}
+
+function run_all {
+    install_base_packages
+    install_github_tools
+    configure_zsh
+    configure_neovim
+    install_nvm_pyenv
+    echo -e "\n\e[32m=======================================================\e[0m"
+    echo -e "\e[32m¡INSTALACIÓN COMPLETADA EXITOSAMENTE EN WSL!\e[0m"
+    echo -e "\e[33mPor favor escribe 'zsh' o abre una nueva pestaña para disfrutar de tu entorno.\e[0m"
+    echo -e "\e[32m=======================================================\e[0m"
+}
+
+if [[ "${1:-}" == "--all" || "${1:-}" == "-a" ]]; then
+    run_all
+    exit 0
 fi
 
-echo -e "\n\e[33m[8/9] Instalando tema local de Oh My Posh...\e[0m"
-mkdir -p "$HOME/.config/omp"
-cp "$DIR/themes/catppuccin_mocha.omp.json" "$HOME/.config/omp/catppuccin_mocha.omp.json"
-echo "Tema local de Oh My Posh instalado."
+while true; do
+    clear
+    echo -e "\e[36m==========================================\e[0m"
+    echo -e "\e[35m   TERMINAL NIVEL DIOS - INSTALADOR (LINUX)\e[0m"
+    echo -e "\e[36m==========================================\e[0m"
+    echo " [1] Instalación Completa (Modo Dios)"
+    echo " [2] Instalar Utilidades Base (DNF)"
+    echo " [3] Instalar Herramientas Modernas (GitHub Releases)"
+    echo " [4] Configurar Oh My Zsh y Temas"
+    echo " [5] Configurar Neovim (LazyVim)"
+    echo " [6] Instalar NVM y Pyenv"
+    echo ""
+    echo -e " \e[33m[R] Revertir (Restaurar bash y copias de seguridad)\e[0m"
+    echo -e " \e[31m[Q] Salir\e[0m"
+    echo -e "\e[36m==========================================\e[0m"
+    
+    read -p "Seleccione una opción: " opt
 
-# 9. Instalar NVM y Pyenv (herramientas de entorno de usuario)
-echo -e "\n\e[33m[9/9] Instalando NVM y Pyenv...\e[0m"
-
-NVM_INSTALL_VERSION="v0.40.5"
-PYENV_VERSION="v2.7.1"
-
-if [ ! -d "$HOME/.nvm" ]; then
-    echo "Instalando NVM (${NVM_INSTALL_VERSION})..."
-    curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh" | bash
-else
-    echo "NVM ya instalado, omitiendo."
-fi
-
-if [ ! -d "$HOME/.pyenv" ]; then
-    echo "Instalando Pyenv (${PYENV_VERSION})..."
-    git clone --branch "$PYENV_VERSION" --depth 1 \
-        https://github.com/pyenv/pyenv.git "$HOME/.pyenv"
-else
-    echo "Pyenv ya instalado, omitiendo."
-fi
-
-echo -e "\n\e[32m=======================================================\e[0m"
-echo -e "\e[32m¡INSTALACIÓN COMPLETADA EXITOSAMENTE EN WSL!\e[0m"
-echo -e "\e[33mPor favor escribe 'zsh' o abre una nueva pestaña para disfrutar de tu entorno.\e[0m"
-echo -e "\e[32m=======================================================\e[0m"
-
-# Benchmark opcional de inicio
-echo "Benchmark de inicio de shell:"
-time zsh -i -c exit || true
+    case "$opt" in
+        1) run_all; read -p "Presione Enter para continuar..."; break ;;
+        2) install_base_packages; read -p "Presione Enter para continuar..." ;;
+        3) install_github_tools; read -p "Presione Enter para continuar..." ;;
+        4) configure_zsh; read -p "Presione Enter para continuar..." ;;
+        5) configure_neovim; read -p "Presione Enter para continuar..." ;;
+        6) install_nvm_pyenv; read -p "Presione Enter para continuar..." ;;
+        [rR]) restore_backups; read -p "Presione Enter para continuar..." ;;
+        [qQ]) exit 0 ;;
+        *) echo -e "\e[31mOpción inválida.\e[0m"; sleep 1 ;;
+    esac
+done
