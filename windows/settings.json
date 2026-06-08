@@ -1,0 +1,432 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions": [],
+    "alwaysOnTop": false,
+    "alwaysShowNotificationIcon": false,
+    "centerOnLaunch": true,
+    "copyFormatting": "none",
+    "copyOnSelect": true,
+    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "disableAnimations": false,
+    "initialCols": 120,
+    "initialRows": 30,
+    "keybindings": 
+    [
+        {
+            "id": "Terminal.ResizePaneDown",
+            "keys": "ctrl+alt+down"
+        },
+        {
+            "id": "Terminal.QuakeMode",
+            "keys": "win+ctrl+t"
+        },
+        {
+            "id": "Terminal.MoveFocusDown",
+            "keys": "alt+down"
+        },
+        {
+            "id": "Terminal.OpenNewTab",
+            "keys": "ctrl+shift+t"
+        },
+        {
+            "id": "Terminal.ClosePane",
+            "keys": "ctrl+shift+w"
+        },
+        {
+            "id": "Terminal.DuplicateTab",
+            "keys": "ctrl+shift+d"
+        },
+        {
+            "id": "Terminal.CopyToClipboard",
+            "keys": "ctrl+c"
+        },
+        {
+            "id": "Terminal.PrevTab",
+            "keys": "ctrl+shift+tab"
+        },
+        {
+            "id": "Terminal.NextTab",
+            "keys": "ctrl+tab"
+        },
+        {
+            "id": "Terminal.SwitchToTab0",
+            "keys": "ctrl+1"
+        },
+        {
+            "id": "Terminal.SwitchToTab1",
+            "keys": "ctrl+2"
+        },
+        {
+            "id": "Terminal.SwitchToTab3",
+            "keys": "ctrl+4"
+        },
+        {
+            "id": "Terminal.SwitchToTab2",
+            "keys": "ctrl+3"
+        },
+        {
+            "id": "Terminal.SwitchToTab4",
+            "keys": "ctrl+5"
+        },
+        {
+            "id": "Terminal.SplitPaneDown",
+            "keys": "ctrl+shift+minus"
+        },
+        {
+            "id": "Terminal.SplitPaneDown",
+            "keys": "ctrl+shift+numpad_minus"
+        },
+        {
+            "id": "Terminal.SplitPaneRight",
+            "keys": "ctrl+shift+plus"
+        },
+        {
+            "id": "Terminal.SplitPaneRight",
+            "keys": "ctrl+shift+numpad_plus"
+        },
+        {
+            "id": "Terminal.IncreaseFontSize",
+            "keys": "ctrl+plus"
+        },
+        {
+            "id": "Terminal.DecreaseFontSize",
+            "keys": "ctrl+minus"
+        },
+        {
+            "id": "Terminal.DuplicatePaneAuto",
+            "keys": "alt+shift+d"
+        },
+        {
+            "id": "Terminal.MoveFocusLeft",
+            "keys": "alt+left"
+        },
+        {
+            "id": "Terminal.DecreaseFontSize",
+            "keys": "ctrl+numpad_minus"
+        },
+        {
+            "id": "Terminal.MoveFocusRight",
+            "keys": "alt+right"
+        },
+        {
+            "id": "Terminal.MoveFocusUp",
+            "keys": "alt+up"
+        },
+        {
+            "id": "Terminal.ResizePaneLeft",
+            "keys": "ctrl+alt+left"
+        },
+        {
+            "id": "Terminal.ResizePaneRight",
+            "keys": "ctrl+alt+right"
+        },
+        {
+            "id": "Terminal.OpenTabRenamer",
+            "keys": "ctrl+shift+r"
+        },
+        {
+            "id": "Terminal.ResizePaneUp",
+            "keys": "ctrl+alt+up"
+        },
+        {
+            "id": "Terminal.PasteFromClipboard",
+            "keys": "ctrl+v"
+        },
+        {
+            "id": "Terminal.FindText",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "id": "Terminal.IncreaseFontSize",
+            "keys": "ctrl+numpad_plus"
+        },
+        {
+            "id": "Terminal.ResetFontSize",
+            "keys": "ctrl+0"
+        },
+        {
+            "id": "Terminal.ToggleFullscreen",
+            "keys": "alt+enter"
+        },
+        {
+            "id": "Terminal.ToggleFocusMode",
+            "keys": "ctrl+shift+p"
+        },
+        {
+            "id": "Terminal.ToggleCommandPalette",
+            "keys": "ctrl+shift+space"
+        },
+        {
+            "id": "Terminal.ScrollUpPage",
+            "keys": "ctrl+shift+pgup"
+        },
+        {
+            "id": "Terminal.ScrollDownPage",
+            "keys": "ctrl+shift+pgdn"
+        }
+    ],
+    "launchMode": "default",
+    "newTabMenu": 
+    [
+        {
+            "allowEmpty": false,
+            "entries": 
+            [
+                {
+                    "icon": null,
+                    "profile": "{195f0404-c22e-5df3-baa5-20e13c88ba93}",
+                    "type": "profile"
+                },
+                {
+                    "icon": null,
+                    "profile": "AlmaLinux-9",
+                    "type": "profile"
+                }
+            ],
+            "icon": null,
+            "inline": "never",
+            "name": "\ud83d\udc27 Linux",
+            "type": "folder"
+        },
+        {
+            "allowEmpty": false,
+            "entries": 
+            [
+                {
+                    "icon": null,
+                    "profile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                    "type": "profile"
+                },
+                {
+                    "icon": null,
+                    "profile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                    "type": "profile"
+                },
+                {
+                    "icon": null,
+                    "profile": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                    "type": "profile"
+                }
+            ],
+            "icon": null,
+            "inline": "never",
+            "name": "\ud83e\ude9f Windows",
+            "type": "folder"
+        },
+        {
+            "allowEmpty": false,
+            "entries": 
+            [
+                {
+                    "icon": null,
+                    "profile": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
+                    "type": "profile"
+                },
+                {
+                    "icon": null,
+                    "profile": "{7b79140d-9fae-5e94-8b93-29715ff4a0f2}",
+                    "type": "profile"
+                },
+                {
+                    "icon": null,
+                    "profile": "{22415e1c-4b1f-56ca-ac64-6967b955e8c0}",
+                    "type": "profile"
+                }
+            ],
+            "icon": null,
+            "inline": "never",
+            "name": "\ud83d\udee0\ufe0f Dev Tools",
+            "type": "folder"
+        },
+        {
+            "type": "separator"
+        },
+        {
+            "icon": null,
+            "profile": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+            "type": "profile"
+        }
+    ],
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "adjustIndistinguishableColors": "indexed",
+            "altGrAliasing": true,
+            "bellStyle": "none",
+            "colorScheme": "Catppuccin Mocha",
+            "cursorShape": "bar",
+            "backgroundImage": "ms-appdata:///local/cyberpunk_terminal_bg.png",
+            "backgroundImageOpacity": 0.4,
+            "backgroundImageStretchMode": "uniformToFill",
+            "font": 
+            {
+                "face": "JetBrainsMono Nerd Font Mono",
+                "size": 12,
+                "weight": "normal"
+            },
+            "historySize": 9999,
+            "opacity": 90,
+            "padding": "8, 8, 8, 8",
+            "scrollbarState": "visible",
+            "snapOnInput": true,
+            "unfocusedAppearance": 
+            {
+                "opacity": 40
+            },
+            "useAcrylic": false
+        },
+        "list": 
+        [
+            {
+                "colorScheme": "Tokyo Night",
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell 7",
+                "source": "Windows.Terminal.PowershellCore",
+                "tabColor": "#7AA2F7"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell 5.1 (Legacy)",
+                "tabColor": "#414868"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "S\u00edmbolo del sistema",
+                "tabColor": "#E0AF68"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "colorScheme": "Dracula",
+                "guid": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
+                "hidden": false,
+                "name": "Git Bash",
+                "source": "Git",
+                "tabColor": "#FF79C6"
+            },
+            {
+                "guid": "{040417d6-8862-57d0-8add-9ba75fe2e95a}",
+                "hidden": true,
+                "name": "AlmaLinux-9",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "colorScheme": "Catppuccin Mocha",
+                "guid": "{ce05da12-203e-57dc-8575-fea6a14a8aa6}",
+                "hidden": false,
+                "name": "AlmaLinux-9",
+                "source": "Microsoft.WSL",
+                "tabColor": "#F38BA8"
+            },
+            {
+                "guid": "{7b79140d-9fae-5e94-8b93-29715ff4a0f2}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 18",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{22415e1c-4b1f-56ca-ac64-6967b955e8c0}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 18",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "colorScheme": "Catppuccin Mocha",
+                "guid": "{195f0404-c22e-5df3-baa5-20e13c88ba93}",
+                "hidden": false,
+                "name": "Ubuntu",
+                "source": "Microsoft.WSL",
+                "tabColor": "#A6E3A1"
+            }
+        ]
+    },
+    "schemes": 
+    [
+        {
+            "background": "#1E1E2E",
+            "black": "#45475A",
+            "blue": "#89B4FA",
+            "brightBlack": "#585B70",
+            "brightBlue": "#89B4FA",
+            "brightCyan": "#94E2D5",
+            "brightGreen": "#A6E3A1",
+            "brightPurple": "#F5C2E7",
+            "brightRed": "#F38BA8",
+            "brightWhite": "#A6ADC8",
+            "brightYellow": "#F9E2AF",
+            "cursorColor": "#F5E0DC",
+            "cyan": "#94E2D5",
+            "foreground": "#CDD6F4",
+            "green": "#A6E3A1",
+            "name": "Catppuccin Mocha",
+            "purple": "#F5C2E7",
+            "red": "#F38BA8",
+            "selectionBackground": "#585B70",
+            "white": "#BAC2DE",
+            "yellow": "#F9E2AF"
+        },
+        {
+            "background": "#282A36",
+            "black": "#21222C",
+            "blue": "#BD93F9",
+            "brightBlack": "#6272A4",
+            "brightBlue": "#D6ACFF",
+            "brightCyan": "#A4FFFF",
+            "brightGreen": "#69FF94",
+            "brightPurple": "#FF92DF",
+            "brightRed": "#FF6E6E",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFFFA5",
+            "cursorColor": "#F8F8F2",
+            "cyan": "#8BE9FD",
+            "foreground": "#F8F8F2",
+            "green": "#50FA7B",
+            "name": "Dracula",
+            "purple": "#FF79C6",
+            "red": "#FF5555",
+            "selectionBackground": "#44475A",
+            "white": "#F8F8F2",
+            "yellow": "#F1FA8C"
+        },
+        {
+            "background": "#1A1B26",
+            "black": "#15161E",
+            "blue": "#7AA2F7",
+            "brightBlack": "#414868",
+            "brightBlue": "#7AA2F7",
+            "brightCyan": "#7DCFFF",
+            "brightGreen": "#9ECE6A",
+            "brightPurple": "#BB9AF7",
+            "brightRed": "#F7768E",
+            "brightWhite": "#C0CAF5",
+            "brightYellow": "#E0AF68",
+            "cursorColor": "#C0CAF5",
+            "cyan": "#7DCFFF",
+            "foreground": "#C0CAF5",
+            "green": "#9ECE6A",
+            "name": "Tokyo Night",
+            "purple": "#BB9AF7",
+            "red": "#F7768E",
+            "selectionBackground": "#33467C",
+            "white": "#A9B1D6",
+            "yellow": "#E0AF68"
+        }
+    ],
+    "showTabsInTitlebar": true,
+    "tabSwitcherMode": "mru",
+    "tabWidthMode": "equal",
+    "theme": "dark",
+    "themes": [],
+    "warning.confirmCloseAllTabs": true
+}
