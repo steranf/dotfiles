@@ -53,7 +53,7 @@ function Install-PSModules {
     Install-Module -Name PSFzf -Force -AllowClobber -ErrorAction SilentlyContinue
 }
 
-function Configure-PSProfile {
+function Set-PSProfile {
     Write-Host "`n[*] Restaurando perfil de PowerShell..." -ForegroundColor Yellow
     if (Test-Path -Path $PROFILE) {
         Copy-Item -Path $PROFILE -Destination "$PROFILE.bak" -Force
@@ -64,7 +64,7 @@ function Configure-PSProfile {
     Write-Host "Perfil de PowerShell copiado con éxito." -ForegroundColor Green
 }
 
-function Configure-Neovim {
+function Set-NeovimConfig {
     Write-Host "`n[*] Restaurando configuración de Neovim (LazyVim)..." -ForegroundColor Cyan
     $nvimDest = "$env:LOCALAPPDATA\nvim"
     $nvimSource = "$dotfilesDir\nvim"
@@ -78,7 +78,7 @@ function Configure-Neovim {
     }
 }
 
-function Configure-WindowsTerminal {
+function Set-WindowsTerminalConfig {
     Write-Host "`n[*] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow
     $wtLocalStateDir = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
     if (Test-Path -Path $wtLocalStateDir) {
@@ -108,7 +108,8 @@ function Install-FontsAndThemes {
     Write-Host "Tema local instalado." -ForegroundColor Green
 }
 
-function Configure-WSL {
+function Set-WslConfig {
+    param([switch]$Headless)
     Write-Host "`n[*] Configurando .wslconfig para WSL2..." -ForegroundColor Yellow
     $totalRAMBytes = (Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory
     $totalRAMGB    = [math]::Floor($totalRAMBytes / 1GB)
@@ -121,13 +122,19 @@ function Configure-WSL {
     Write-Host "  Recomendacion      : ${recRAM}GB memoria  ·  ${recCPU} procesadores"        -ForegroundColor Green
     Write-Host ""
 
-    $choice = Read-Host "  Aceptar recomendacion? [S/n]"
-    if ($choice -eq 'n' -or $choice -eq 'N') {
-        $wslRAM = Read-Host "  Memoria para WSL2 (ej: 8GB)"
-        $wslCPU = Read-Host "  Procesadores (ej: 4)"
-    } else {
+    if ($Headless) {
         $wslRAM = "${recRAM}GB"
         $wslCPU = "$recCPU"
+        Write-Host "  Modo desatendido: usando valores recomendados." -ForegroundColor DarkGray
+    } else {
+        $choice = Read-Host "  Aceptar recomendacion? [S/n]"
+        if ($choice -eq 'n' -or $choice -eq 'N') {
+            $wslRAM = Read-Host "  Memoria para WSL2 (ej: 8GB)"
+            $wslCPU = Read-Host "  Procesadores (ej: 4)"
+        } else {
+            $wslRAM = "${recRAM}GB"
+            $wslCPU = "$recCPU"
+        }
     }
 
     if (Test-Path "$env:USERPROFILE\.wslconfig") {
@@ -176,19 +183,19 @@ function Restore-Backups {
     Write-Host "`nLa desinstalación lógica ha concluido. Los paquetes de Winget no fueron removidos para no afectar otros flujos." -ForegroundColor Yellow
 }
 
-function Run-All {
+function Invoke-FullInstall {
     Install-SoftwareBase
     Install-PSModules
-    Configure-PSProfile
-    Configure-Neovim
-    Configure-WindowsTerminal
+    Set-PSProfile
+    Set-NeovimConfig
+    Set-WindowsTerminalConfig
     Install-FontsAndThemes
-    Configure-WSL
+    Set-WslConfig -Headless
 }
 
 if ($All) {
     Write-Host "Iniciando instalación completa (Modo Desatendido)..." -ForegroundColor Cyan
-    Run-All
+    Invoke-FullInstall
     Write-Host "`n=======================================================" -ForegroundColor Cyan
     Write-Host "¡INSTALACIÓN COMPLETADA EXITOSAMENTE!" -ForegroundColor Green
     exit
@@ -214,12 +221,12 @@ while ($true) {
     $opt = Read-Host "Seleccione una opción"
 
     switch ($opt.ToUpper()) {
-        "1" { Run-All; Pause; break }
+        "1" { Invoke-FullInstall; Pause; break }
         "2" { Install-SoftwareBase; Install-PSModules; Pause }
-        "3" { Configure-PSProfile; Install-FontsAndThemes; Pause }
-        "4" { Configure-Neovim; Pause }
-        "5" { Configure-WindowsTerminal; Pause }
-        "6" { Configure-WSL; Pause }
+        "3" { Set-PSProfile; Install-FontsAndThemes; Pause }
+        "4" { Set-NeovimConfig; Pause }
+        "5" { Set-WindowsTerminalConfig; Pause }
+        "6" { Set-WslConfig; Pause }
         "R" { Restore-Backups; Pause }
         "Q" { exit }
         default { Write-Host "Opción inválida." -ForegroundColor Red; Start-Sleep -Seconds 1 }

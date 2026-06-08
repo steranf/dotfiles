@@ -59,6 +59,26 @@ check_tool "nvim" "Neovim" || errors+=1
 check_tool "rg" "Ripgrep" || errors+=1
 check_tool "fd" "Fd" || check_tool "fdfind" "Fd" || errors+=1
 
+echo -e "\n\e[33m--- Gestores de Versiones ---\e[0m"
+
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+    # shellcheck disable=SC1090
+    . "$HOME/.nvm/nvm.sh"
+    nvm_ver=$(nvm --version 2>/dev/null)
+    echo -e "\e[32m[✓] NVM (Node Version Manager)\e[0m - Encontrado ($nvm_ver)"
+else
+    echo -e "\e[31m[x] NVM (Node Version Manager)\e[0m - NO ENCONTRADO (~/.nvm/nvm.sh ausente)"
+    errors+=1
+fi
+
+if [ -x "$HOME/.pyenv/bin/pyenv" ]; then
+    pyenv_ver=$("$HOME/.pyenv/bin/pyenv" --version 2>/dev/null | awk '{print $2}')
+    echo -e "\e[32m[✓] Pyenv\e[0m - Encontrado ($pyenv_ver)"
+else
+    echo -e "\e[31m[x] Pyenv\e[0m - NO ENCONTRADO (~/.pyenv/bin/pyenv ausente)"
+    errors+=1
+fi
+
 echo -e "\n\e[36m====================================================\e[0m"
 if [ $errors -eq 0 ]; then
     echo -e "\e[32mResultado: Excelente. Todas las herramientas están instaladas y funcionando.\e[0m"

@@ -11,6 +11,8 @@ EZA_VERSION="v0.20.2"
 LAZYGIT_VERSION="0.48.0"
 FASTFETCH_VERSION="2.38.0"
 NVIM_VERSION="v0.12.2"
+ZSH_AUTOSUGGESTIONS_VERSION="v0.7.1"
+ZSH_SYNTAX_HIGHLIGHTING_VERSION="0.8.0"
 
 # Detectar arquitectura
 ARCH=$(uname -m)
@@ -61,7 +63,9 @@ function install_github_tools {
     echo -e "\n\e[33m[*] Instalando utilidades desde GitHub releases...\e[0m"
     local WORK_DIR
     WORK_DIR=$(mktemp -d)
-    
+    # shellcheck disable=SC2064
+    trap "cd '$DIR'; rm -rf '$WORK_DIR'" RETURN EXIT
+
     cd "$WORK_DIR" || exit 1
 
     # Oh My Posh
@@ -108,8 +112,6 @@ function install_github_tools {
     tar xzf nvim.tar.gz
     sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
     
-    cd "$DIR"
-    rm -rf "$WORK_DIR"
 }
 
 function configure_zsh {
@@ -125,10 +127,10 @@ function configure_zsh {
         git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
     fi
     if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-        git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+        git clone --branch "$ZSH_AUTOSUGGESTIONS_VERSION" --depth 1 https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
     fi
     if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+        git clone --branch "$ZSH_SYNTAX_HIGHLIGHTING_VERSION" --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     fi
 
     echo -e "\n\e[33m[*] Restaurando perfil .zshrc con backup...\e[0m"
@@ -154,6 +156,16 @@ function configure_neovim {
         echo "Configuración de Neovim (LazyVim) restaurada desde dotfiles."
     else
         echo -e "\e[33m[ADVERTENCIA] No se encontró el directorio nvim en el repositorio.\e[0m"
+    fi
+}
+
+function configure_git {
+    echo -e "\n\e[33m[*] Configurando plantilla de Git...\e[0m"
+    if [ ! -f "$HOME/.gitconfig" ]; then
+        cp "$DIR/linux/.gitconfig" "$HOME/.gitconfig"
+        echo "Plantilla .gitconfig copiada. Edita nombre y email: git config --global user.name / user.email"
+    else
+        echo "Ya existe ~/.gitconfig, omitiendo para no sobrescribir tu configuración."
     fi
 }
 
@@ -214,6 +226,7 @@ function run_all {
     install_github_tools
     configure_zsh
     configure_neovim
+    configure_git
     install_nvm_pyenv
     echo -e "\n\e[32m=======================================================\e[0m"
     echo -e "\e[32m¡INSTALACIÓN COMPLETADA EXITOSAMENTE EN WSL!\e[0m"
@@ -245,13 +258,20 @@ while true; do
     read -p "Seleccione una opción: " opt
 
     case "$opt" in
-        1) run_all; read -p "Presione Enter para continuar..."; break ;;
-        2) install_base_packages; read -p "Presione Enter para continuar..." ;;
-        3) install_github_tools; read -p "Presione Enter para continuar..." ;;
-        4) configure_zsh; read -p "Presione Enter para continuar..." ;;
-        5) configure_neovim; read -p "Presione Enter para continuar..." ;;
-        6) install_nvm_pyenv; read -p "Presione Enter para continuar..." ;;
-        [rR]) restore_backups; read -p "Presione Enter para continuar..." ;;
+        1) ( run_all ) || echo -e "\e[31m[Error] La instalación falló. Revisa los mensajes de arriba.\e[0m"
+           read -p "Presione Enter para continuar..."; break ;;
+        2) ( install_base_packages ) || echo -e "\e[31m[Error] Falló. Regresando al menú...\e[0m"
+           read -p "Presione Enter para continuar..." ;;
+        3) ( install_github_tools ) || echo -e "\e[31m[Error] Falló. Regresando al menú...\e[0m"
+           read -p "Presione Enter para continuar..." ;;
+        4) ( configure_zsh ) || echo -e "\e[31m[Error] Falló. Regresando al menú...\e[0m"
+           read -p "Presione Enter para continuar..." ;;
+        5) ( configure_neovim ) || echo -e "\e[31m[Error] Falló. Regresando al menú...\e[0m"
+           read -p "Presione Enter para continuar..." ;;
+        6) ( install_nvm_pyenv ) || echo -e "\e[31m[Error] Falló. Regresando al menú...\e[0m"
+           read -p "Presione Enter para continuar..." ;;
+        [rR]) ( restore_backups ) || echo -e "\e[31m[Error] Falló. Regresando al menú...\e[0m"
+              read -p "Presione Enter para continuar..." ;;
         [qQ]) exit 0 ;;
         *) echo -e "\e[31mOpción inválida.\e[0m"; sleep 1 ;;
     esac

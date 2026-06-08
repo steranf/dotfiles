@@ -104,8 +104,6 @@ source "$ZSH/oh-my-zsh.sh"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # --- Configuración añadida para Terminal de Alto Nivel ---
-# PATH for local binaries
-export PATH=$PATH:/usr/local/bin
 
 # Editor por Defecto (Productividad)
 export EDITOR="nvim"
