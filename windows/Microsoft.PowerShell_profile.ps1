@@ -11,12 +11,31 @@ Set-PSReadLineOption -PredictionViewStyle InlineView
 Set-PSReadLineOption -Colors @{ InlinePrediction = "$([char]27)[38;5;238m" }
 
 # 2. Prompt Visual Avanzado (Oh My Posh)
-# Tema elegido: Catppuccin Mocha
-oh-my-posh init pwsh --config "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin_mocha.omp.json" | Invoke-Expression
+# Tema elegido: Catppuccin Mocha (Carga Local y Segura)
+$ompConfig = "$HOME\.config\omp\catppuccin_mocha.omp.json"
+if (Test-Path $ompConfig) {
+    oh-my-posh init pwsh --config $ompConfig | Invoke-Expression
+}
 
 # 3. Terminal-Icons (El 'ls' más hermoso)
-Import-Module -Name Terminal-Icons
+if (Get-Module -ListAvailable -Name Terminal-Icons) {
+    Import-Module -Name Terminal-Icons
+}
 
 # 4. Buscador de Historial (FZF)
-Import-Module -Name PSFzf
-Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+if (Get-Module -ListAvailable -Name PSFzf) {
+    Import-Module -Name PSFzf
+    Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+}
+
+# 5. Alias de Productividad (Git y otros)
+function gs { git status }
+function ga { git add $args }
+function gc { git commit -m $args }
+function gl { git log --oneline --graph --decorate -n 15 }
+function lg { lazygit }
+
+# 6. Información del Sistema (Fastfetch)
+if (Get-Command fastfetch -ErrorAction SilentlyContinue) {
+    fastfetch
+}

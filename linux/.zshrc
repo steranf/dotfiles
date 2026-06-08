@@ -110,13 +110,32 @@ export PATH=$PATH:/usr/local/bin
 # Búsqueda FZF (Historial con Ctrl+R, Archivos con Ctrl+T)
 source /usr/share/fzf/shell/key-bindings.zsh
 
-# Oh My Posh (Prompt Visual)
-eval "$(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin_mocha.omp.json')"
+# Oh My Posh (Prompt Visual) - Carga Local
+export OMP_CONFIG="$HOME/.config/omp/catppuccin_mocha.omp.json"
+if [ -f "$OMP_CONFIG" ]; then
+    eval "$(oh-my-posh init zsh --config "$OMP_CONFIG")"
+fi
 
 # Zoxide (Navegación inteligente con 'z')
-eval "$(zoxide init zsh)"
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
 
 # Eza (Iconos en listados)
-alias ls='eza --icons'
-alias ll='eza -l --icons'
-alias la='eza -la --icons'
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --icons'
+    alias ll='eza -l --icons'
+    alias la='eza -la --icons'
+fi
+
+# Alias de Productividad (Git y otros)
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit -m'
+alias gl='git log --oneline --graph --decorate -n 15'
+alias lg='lazygit'
+
+# Información del Sistema (Fastfetch)
+if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+fi
