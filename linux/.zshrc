@@ -157,3 +157,23 @@ fi
 if command -v fastfetch >/dev/null 2>&1; then
     fastfetch
 fi
+
+# --- Restauración de Herramientas de Usuario ---
+
+# NVM (Node Version Manager)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Rutas Personalizadas (npm, opencode)
+if command -v npm >/dev/null 2>&1; then
+    export PATH="$(npm root -g)/../bin:$PATH"
+fi
+export PATH="$HOME/.opencode/bin:$PATH"
+
+# Pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv >/dev/null 2>&1; then
+    eval "$(pyenv init - zsh)"
+fi
