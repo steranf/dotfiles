@@ -38,13 +38,7 @@ jobs:
             -o /usr/local/bin/shfmt
           chmod +x /usr/local/bin/shfmt
       - name: Run shfmt
-        run: |
-          shfmt --diff --indent 4 \
-            install.sh update.sh verify.sh uninstall.sh bootstrap.sh \
-            scripts/linux/env.sh scripts/linux/01-core.sh scripts/linux/02-github.sh \
-            scripts/linux/03-shell.sh scripts/linux/04-neovim.sh scripts/linux/99-restore.sh \
-            scripts/macos/01-core.sh scripts/macos/03-shell.sh scripts/macos/04-neovim.sh \
-            scripts/macos/05-dev.sh scripts/macos/99-restore.sh
+        run: find . -name '*.sh' -not -path './.git/*' | sort | xargs shfmt --diff --indent 4
 
   lint-json:
     runs-on: ubuntu-latest

@@ -47,11 +47,13 @@ bump() {
 
     echo "  ↑  $name: ${current} → ${latest_stored}"
     echo "     Descargando amd64 para SHA256..."
-    local sha_amd64; sha_amd64=$(sha256_of_url "$url_amd64")
+    local sha_amd64
+    sha_amd64=$(sha256_of_url "$url_amd64")
     echo "     Descargando arm64 para SHA256..."
-    local sha_arm64; sha_arm64=$(sha256_of_url "$url_arm64")
+    local sha_arm64
+    sha_arm64=$(sha256_of_url "$url_arm64")
 
-    set_var "${name}_VERSION"      "$latest_stored"
+    set_var "${name}_VERSION" "$latest_stored"
     set_var "${name}_SHA256_AMD64" "$sha_amd64"
     set_var "${name}_SHA256_ARM64" "$sha_arm64"
     CHANGED=true
@@ -106,7 +108,7 @@ else
         echo "     Descargando install.sh para SHA256..."
         sha=$(sha256_of_url "https://raw.githubusercontent.com/nvm-sh/nvm/${tag}/install.sh")
         set_var "NVM_INSTALL_VERSION" "$tag"
-        set_var "NVM_SHA256"          "$sha"
+        set_var "NVM_SHA256" "$sha"
         CHANGED=true
     fi
 fi
@@ -115,8 +117,8 @@ fi
 echo ""
 if [ "$CHANGED" = "true" ]; then
     echo "Actualizaciones aplicadas en ${ENV_FILE}."
-    echo "updates_found=true" >> "${GITHUB_OUTPUT:-/dev/null}"
+    echo "updates_found=true" >>"${GITHUB_OUTPUT:-/dev/null}"
 else
     echo "Todas las herramientas están al día."
-    echo "updates_found=false" >> "${GITHUB_OUTPUT:-/dev/null}"
+    echo "updates_found=false" >>"${GITHUB_OUTPUT:-/dev/null}"
 fi

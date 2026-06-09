@@ -9,6 +9,23 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## [1.0.4] — 2026-06-09
+
+### Added
+- CI macOS: job `macOS (Homebrew)` en `test-install.yml`; cubre `install.sh --all` + `verify.sh` en `macos-latest`. Triggers ampliados a `scripts/macos/**` y `stow/**`.
+- `verify.sh`: GNU Stow añadido a sección Core con detección de versión.
+
+### Fixed
+- `verify.sh`: Pyenv detectado vía `command -v pyenv` como fallback para macOS (Homebrew instala en `/opt/homebrew/bin/`, no en `~/.pyenv/bin/`).
+- `verify.sh`: etiqueta de fd renombrada a `Fd-find` para reflejar que acepta `fd` o `fdfind` según la distro.
+
+### Changed
+- CI `lint-shfmt`: lista explícita reemplazada por glob (`find . -name '*.sh'`); cualquier script nuevo queda cubierto automáticamente.
+- `CLAUDE.md`: tabla de configs completa (añadidos `stow/git/` y `stow/nvim/`), descripción de arquitectura actualizada (macOS, GNU Stow), referencia a `env.sh` para versiones pinadas.
+- Directorios vacíos `linux/` y `themes/` eliminados del repo tras migración a `stow/`.
+
+---
+
 ## [1.0.3] — 2026-06-09
 
 ### Added
@@ -81,7 +98,8 @@ Primera versión pública.
 - Supply chain warning automático en PRs de actualización de versiones
 - Eliminado blob binario de 614 KB del historial de git con `git filter-repo`
 
-[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/steranf/dotfiles/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/steranf/dotfiles/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/steranf/dotfiles/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/steranf/dotfiles/compare/v1.0.0...v1.0.1
