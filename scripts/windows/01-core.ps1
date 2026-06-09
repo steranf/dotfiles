@@ -1,5 +1,9 @@
 # 01-core.ps1 - Software Base y Herramientas (Winget)
 
+param (
+    [switch]$SkipWSL   # Omite AlmaLinux (msstore) y wsl --install (uso en CI)
+)
+
 $ErrorActionPreference = 'Stop'
 
 function Install-WingetPackage {
@@ -32,14 +36,22 @@ $packages = @(
 
 foreach ($pkg in $packages) {
     if ($pkg -eq "9P5RWLM70SN9") {
-        Install-WingetPackage -PackageId $pkg -Source msstore
+        if ($SkipWSL) {
+            Write-Host "Omitiendo AlmaLinux (Microsoft Store no disponible en CI)." -ForegroundColor Yellow
+        } else {
+            Install-WingetPackage -PackageId $pkg -Source msstore
+        }
     } else {
         Install-WingetPackage -PackageId $pkg
     }
 }
 
-Write-Host "Instalando motor de WSL..." -ForegroundColor Cyan
-wsl --install --no-distribution
+if ($SkipWSL) {
+    Write-Host "Omitiendo WSL (Hyper-V no disponible en CI)." -ForegroundColor Yellow
+} else {
+    Write-Host "Instalando motor de WSL..." -ForegroundColor Cyan
+    wsl --install --no-distribution
+}
 
 Write-Host "`n[*] Instalando Módulos de PowerShell (Terminal-Icons, PSFzf)..." -ForegroundColor Yellow
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted

@@ -2,14 +2,17 @@
 $ErrorActionPreference = 'Stop'
 
 param (
-    [switch]$All
+    [switch]$All,
+    [switch]$SkipWSL   # Omite WSL y Microsoft Store (uso en CI)
 )
 
 function Invoke-FullInstall {
-    & "$PSScriptRoot\scripts\windows\01-core.ps1"
+    & "$PSScriptRoot\scripts\windows\01-core.ps1" -SkipWSL:$SkipWSL
     & "$PSScriptRoot\scripts\windows\02-terminal.ps1"
     & "$PSScriptRoot\scripts\windows\03-neovim.ps1"
-    & "$PSScriptRoot\scripts\windows\04-wsl.ps1" -Headless
+    if (-not $SkipWSL) {
+        & "$PSScriptRoot\scripts\windows\04-wsl.ps1" -Headless
+    }
 }
 
 if ($All) {

@@ -1,4 +1,8 @@
 # Script de Auditoría Post-Instalación (Windows)
+param (
+    [switch]$SkipWSL   # Omite verificación de WSL (uso en CI)
+)
+
 $ErrorActionPreference = 'SilentlyContinue'
 
 Write-Host "====================================================" -ForegroundColor Cyan
@@ -32,7 +36,12 @@ function Test-Tool {
 
 Write-Host "`n--- Herramientas Core ---" -ForegroundColor Yellow
 Test-Tool "pwsh" "PowerShell 7" { (pwsh -Version) -replace 'PowerShell ', '' }
-Test-Tool "wsl" "WSL" { (wsl --version)[0] -replace 'WSL version: ', '' -replace 'Versión de WSL: ', '' }
+if ($SkipWSL) {
+    Write-Host "[~] WSL " -NoNewline -ForegroundColor Yellow
+    Write-Host "- Omitido (CI — Hyper-V no disponible)" -ForegroundColor White
+} else {
+    Test-Tool "wsl" "WSL" { (wsl --version)[0] -replace 'WSL version: ', '' -replace 'Versión de WSL: ', '' }
+}
 
 Write-Host "`n--- Utilidades de Terminal ---" -ForegroundColor Yellow
 Test-Tool "oh-my-posh" "Oh My Posh" { oh-my-posh --version }

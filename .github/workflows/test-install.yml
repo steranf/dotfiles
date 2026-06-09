@@ -9,9 +9,12 @@ on:
     branches: [ main, master ]
     paths:
       - 'install.sh'
+      - 'install.ps1'
       - 'verify.sh'
+      - 'verify.ps1'
       - 'scripts/linux/**'
       - 'scripts/macos/**'
+      - 'scripts/windows/**'
       - 'stow/**'
   workflow_dispatch:
 
@@ -44,6 +47,21 @@ jobs:
         env:
           HOME: /root
           USER: root
+
+  test-windows:
+    name: Windows (winget)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Ejecutar instalador (modo headless, sin WSL)
+        shell: pwsh
+        run: .\install.ps1 -All -SkipWSL
+
+      - name: Verificar instalación
+        shell: pwsh
+        run: .\verify.ps1 -SkipWSL
 
   test-macos:
     name: macOS (Homebrew)
