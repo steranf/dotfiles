@@ -25,6 +25,7 @@ jobs:
           Invoke-ScriptAnalyzer -Path .\bootstrap.ps1 -Recurse -EnableExit -Severity Error
           Invoke-ScriptAnalyzer -Path .\windows\Microsoft.PowerShell_profile.ps1 -Recurse -EnableExit -Severity Error
           Invoke-ScriptAnalyzer -Path .\verify.ps1 -Recurse -EnableExit -Severity Error
+          Invoke-ScriptAnalyzer -Path .\scripts\windows\ -Recurse -EnableExit -Severity Error
 
   lint-json:
     runs-on: ubuntu-latest
