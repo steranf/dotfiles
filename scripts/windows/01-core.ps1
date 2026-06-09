@@ -34,13 +34,15 @@ $packages = @(
     "sharkdp.fd"
 )
 
+# En CI: Microsoft.PowerShell ya está instalado en el runner y actualizarlo
+# reemplaza el ejecutable pwsh.exe en ejecución, terminando el proceso con exit 1.
+$skipInCI = @("9P5RWLM70SN9", "Microsoft.PowerShell")
+
 foreach ($pkg in $packages) {
-    if ($pkg -eq "9P5RWLM70SN9") {
-        if ($SkipWSL) {
-            Write-Host "Omitiendo AlmaLinux (Microsoft Store no disponible en CI)." -ForegroundColor Yellow
-        } else {
-            Install-WingetPackage -PackageId $pkg -Source msstore
-        }
+    if ($SkipWSL -and $skipInCI -contains $pkg) {
+        Write-Host "Omitiendo $pkg (no disponible o incompatible en CI)." -ForegroundColor Yellow
+    } elseif ($pkg -eq "9P5RWLM70SN9") {
+        Install-WingetPackage -PackageId $pkg -Source msstore
     } else {
         Install-WingetPackage -PackageId $pkg
     }
