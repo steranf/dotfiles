@@ -93,6 +93,24 @@ bump "NVIM" "$tag" \
     "https://github.com/neovim/neovim/releases/download/${tag}/nvim-linux-x86_64.tar.gz" \
     "https://github.com/neovim/neovim/releases/download/${tag}/nvim-linux-arm64.tar.gz"
 
+# NVM  — script shell: una sola URL, un solo SHA256, variable NVM_INSTALL_VERSION
+tag=$(gh_latest "nvm-sh/nvm")
+if [ -z "$tag" ]; then
+    echo "  [!] NVM: no se pudo obtener la versión desde la API, omitiendo."
+else
+    current=$(current_var "NVM_INSTALL_VERSION")
+    if [ "$current" = "$tag" ]; then
+        echo "  ✓  NVM ${current}"
+    else
+        echo "  ↑  NVM: ${current} → ${tag}"
+        echo "     Descargando install.sh para SHA256..."
+        sha=$(sha256_of_url "https://raw.githubusercontent.com/nvm-sh/nvm/${tag}/install.sh")
+        set_var "NVM_INSTALL_VERSION" "$tag"
+        set_var "NVM_SHA256"          "$sha"
+        CHANGED=true
+    fi
+fi
+
 # --- Resultado ---
 echo ""
 if [ "$CHANGED" = "true" ]; then
