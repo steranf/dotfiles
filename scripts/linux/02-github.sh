@@ -4,6 +4,7 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
 _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=scripts/linux/env.sh
 source "$_DIR/env.sh"
 
 echo -e "\n\e[33m[*] Instalando utilidades desde GitHub releases...\e[0m"
@@ -58,7 +59,7 @@ wget --https-only -qO nvim.tar.gz "https://github.com/neovim/neovim/releases/dow
 file nvim.tar.gz | grep -q 'gzip' || { echo "nvim.tar.gz no es un tar.gz válido"; exit 1; }
 verify_sha256 nvim.tar.gz "$NVIM_SHA256"
 tar xzf nvim.tar.gz
-sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
+sudo cp -r "nvim-linux-${NVIM_ARCH}/"* /usr/local/
 sudo chown root:root /usr/local/bin/nvim
 [ -d /usr/local/lib/nvim ]   && sudo chown -R root:root /usr/local/lib/nvim
 [ -d /usr/local/share/nvim ] && sudo chown -R root:root /usr/local/share/nvim

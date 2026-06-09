@@ -62,7 +62,7 @@ check_tool "fd" "Fd" || check_tool "fdfind" "Fd" || errors+=1
 echo -e "\n\e[33m--- Gestores de Versiones ---\e[0m"
 
 if [ -s "$HOME/.nvm/nvm.sh" ]; then
-    # shellcheck disable=SC1090
+    # shellcheck disable=SC1091
     . "$HOME/.nvm/nvm.sh"
     nvm_ver=$(nvm --version 2>/dev/null)
     echo -e "\e[32m[✓] NVM (Node Version Manager)\e[0m - Encontrado ($nvm_ver)"

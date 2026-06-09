@@ -3,6 +3,7 @@ set -euo pipefail
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
 _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=scripts/linux/env.sh
 source "$_DIR/env.sh"
 
 echo -e "\n\e[35m[*] Revirtiendo configuraciones a su estado original...\e[0m"
