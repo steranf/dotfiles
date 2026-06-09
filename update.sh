@@ -1,11 +1,13 @@
 #!/bin/bash
 # Actualiza Oh My Zsh, plugins de Zsh y los dotfiles desde el repositorio.
-# Para actualizar herramientas de GitHub Releases, edita las versiones en
-# install.sh y ejecuta la opción [3] del instalador interactivo.
+# En macOS actualiza herramientas vía Homebrew.
+# En Linux, para actualizar herramientas de GitHub Releases, edita env.sh
+# y ejecuta la opción [3] del instalador interactivo.
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 ENV_FILE="$DIR/scripts/linux/env.sh"
+OS="$(uname -s)"
 
 echo -e "\e[36m==========================================\e[0m"
 echo -e "\e[35m   TERMINAL NIVEL DIOS - ACTUALIZADOR     \e[0m"
@@ -18,7 +20,7 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
     new_commit=$(git -C "$HOME/.oh-my-zsh" rev-parse HEAD)
     echo -e "\e[32m[✓] Oh My Zsh actualizado.\e[0m"
     if [ "$prev_commit" != "$new_commit" ]; then
-        sed -i "s|^export ZSH_OMZ_COMMIT=.*|export ZSH_OMZ_COMMIT=\"${new_commit}\"|" "$ENV_FILE"
+        sed "s|^export ZSH_OMZ_COMMIT=.*|export ZSH_OMZ_COMMIT=\"${new_commit}\"|" "$ENV_FILE" >"${ENV_FILE}.tmp" && mv "${ENV_FILE}.tmp" "$ENV_FILE"
         echo -e "\e[32m[✓] ZSH_OMZ_COMMIT: ${prev_commit:0:8} → ${new_commit:0:8}\e[0m"
     fi
 else
@@ -39,8 +41,23 @@ done
 echo -e "\n\e[33m[*] Actualizando dotfiles desde el repositorio...\e[0m"
 git -C "$DIR" pull --ff-only && echo -e "\e[32m[✓] Dotfiles actualizados.\e[0m"
 
+if [ "$OS" = "Darwin" ]; then
+    echo -e "\n\e[33m[*] Actualizando herramientas (Homebrew)...\e[0m"
+    for _tool in jandedobbeleer/oh-my-posh/oh-my-posh eza lazygit fastfetch neovim; do
+        _name="${_tool##*/}"
+        if brew list "$_name" &>/dev/null 2>&1; then
+            brew upgrade "$_tool" 2>&1 | grep -E 'already|upgraded|Error' || true
+            echo -e "  \e[32m[✓] $_name\e[0m"
+        else
+            echo -e "  \e[33m[!] $_name no instalado, omitiendo.\e[0m"
+        fi
+    done
+else
+    echo -e "\n\e[33m[*] Herramientas de GitHub Releases:\e[0m"
+    echo -e "\e[33m  Para actualizar, edita las versiones en scripts/linux/env.sh\e[0m"
+    echo -e "\e[33m  y ejecuta la opción [3] del instalador interactivo.\e[0m"
+fi
+
 echo -e "\n\e[32m==========================================\e[0m"
 echo -e "\e[32m¡Actualización completa!\e[0m"
-echo -e "\e[33mPara actualizar herramientas de GitHub Releases,\e[0m"
-echo -e "\e[33medita las versiones en install.sh y ejecuta la opción [3].\e[0m"
 echo -e "\e[32m==========================================\e[0m"
