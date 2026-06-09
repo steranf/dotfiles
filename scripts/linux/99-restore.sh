@@ -8,6 +8,12 @@ source "$_DIR/env.sh"
 
 echo -e "\n\e[35m[*] Revirtiendo configuraciones a su estado original...\e[0m"
 
+# Desvincular dotfiles gestionados por stow
+if command -v stow >/dev/null 2>&1; then
+    stow -D -d "$DIR/stow" -t "$HOME" zsh git omp nvim 2>/dev/null || true
+    echo -e "\e[32m[OK] Dotfiles desvinculados (stow).\e[0m"
+fi
+
 # Restaurar .zshrc
 if [ -f "$HOME/.zshrc.bak" ]; then
     cp "$HOME/.zshrc.bak" "$HOME/.zshrc"

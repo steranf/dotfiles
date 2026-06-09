@@ -15,7 +15,7 @@ fi
 echo -e "\e[32m[✓] $(brew --version | head -1)\e[0m"
 
 echo -e "\n\e[33m[*] Instalando utilidades base...\e[0m"
-brew install git curl wget jq fzf zoxide bat ripgrep fd
+brew install git curl wget jq fzf zoxide bat ripgrep fd stow
 
 echo -e "\n\e[33m[*] Instalando herramientas de terminal...\e[0m"
 brew install jandedobbeleer/oh-my-posh/oh-my-posh eza lazygit fastfetch neovim

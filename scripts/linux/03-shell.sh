@@ -33,8 +33,10 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
     git clone --branch "$ZSH_SYNTAX_HIGHLIGHTING_VERSION" --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
 
-echo -e "\n\e[33m[*] Restaurando perfil .zshrc con backup...\e[0m"
-if [ -f "$HOME/.zshrc" ]; then
+echo -e "\n\e[33m[*] Vinculando dotfiles con GNU Stow...\e[0m"
+
+# .zshrc — backup antes de stow
+if [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
     if [ ! -f "$HOME/.zshrc.bak" ]; then
         cp "$HOME/.zshrc" "$HOME/.zshrc.bak"
         echo "Backup de .zshrc creado en ~/.zshrc.bak"
@@ -42,16 +44,18 @@ if [ -f "$HOME/.zshrc" ]; then
         echo "Backup de .zshrc ya existe, omitiendo para evitar sobreescritura."
     fi
 fi
-cp "$DIR/linux/.zshrc" "$HOME/.zshrc"
+rm -f "$HOME/.zshrc"
+stow -d "$DIR/stow" -t "$HOME" zsh
 
-echo -e "\n\e[33m[*] Instalando tema local de Oh My Posh...\e[0m"
+# Tema de Oh My Posh
 mkdir -p "$HOME/.config/omp"
-cp "$DIR/themes/catppuccin_mocha.omp.json" "$HOME/.config/omp/catppuccin_mocha.omp.json"
+rm -f "$HOME/.config/omp/catppuccin_mocha.omp.json"
+stow -d "$DIR/stow" -t "$HOME" omp
 
-echo -e "\n\e[33m[*] Configurando plantilla de Git...\e[0m"
-if [ ! -f "$HOME/.gitconfig" ]; then
-    cp "$DIR/linux/.gitconfig" "$HOME/.gitconfig"
-    echo "Plantilla .gitconfig copiada. Edita nombre y email: git config --global user.name / user.email"
+# .gitconfig — solo si no existe (configuración personal del usuario)
+if [ ! -f "$HOME/.gitconfig" ] && [ ! -L "$HOME/.gitconfig" ]; then
+    stow -d "$DIR/stow" -t "$HOME" git
+    echo "Plantilla .gitconfig vinculada vía stow. Edita: git config --global user.name / user.email"
 else
     echo "Ya existe ~/.gitconfig, omitiendo para no sobrescribir tu configuración."
 fi

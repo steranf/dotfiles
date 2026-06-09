@@ -3,6 +3,7 @@
 # Revierte configs, elimina binarios, Oh My Zsh, NVM y Pyenv.
 set -euo pipefail
 OS="$(uname -s)"
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo -e "\e[36m====================================================\e[0m"
 echo -e "\e[31m   TERMINAL NIVEL DIOS - DESINSTALADOR COMPLETO    \e[0m"
@@ -29,6 +30,11 @@ echo ""
 # --- 1. Configs ---
 
 echo -e "\e[33m[*] Revirtiendo configuraciones...\e[0m"
+
+if command -v stow >/dev/null 2>&1; then
+    stow -D -d "$_SCRIPT_DIR/stow" -t "$HOME" zsh git omp nvim 2>/dev/null || true
+    echo -e "  \e[32m[✓] Dotfiles desvinculados (stow)\e[0m"
+fi
 
 if [ -f "$HOME/.zshrc.bak" ]; then
     cp "$HOME/.zshrc.bak" "$HOME/.zshrc"

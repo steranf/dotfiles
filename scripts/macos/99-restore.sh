@@ -3,7 +3,16 @@
 set -euo pipefail
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
+_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DIR="$(cd "$_DIR/../.." && pwd)"
+
 echo -e "\n\e[35m[*] Revirtiendo configuraciones a su estado original...\e[0m"
+
+# Desvincular dotfiles gestionados por stow
+if command -v stow >/dev/null 2>&1; then
+    stow -D -d "$DIR/stow" -t "$HOME" zsh git omp nvim 2>/dev/null || true
+    echo -e "\e[32m[OK] Dotfiles desvinculados (stow).\e[0m"
+fi
 
 if [ -f "$HOME/.zshrc.bak" ]; then
     cp "$HOME/.zshrc.bak" "$HOME/.zshrc"

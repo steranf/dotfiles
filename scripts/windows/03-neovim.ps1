@@ -5,7 +5,7 @@ $dotfilesDir = Resolve-Path "$PSScriptRoot\..\.." | Select-Object -ExpandPropert
 
 Write-Host "`n[*] Restaurando configuración de Neovim (LazyVim)..." -ForegroundColor Cyan
 $nvimDest = "$env:LOCALAPPDATA\nvim"
-$nvimSource = "$dotfilesDir\nvim"
+$nvimSource = "$dotfilesDir\stow\nvim\.config\nvim"
 
 if (Test-Path -Path $nvimSource) {
     if (Test-Path -Path $nvimDest) {

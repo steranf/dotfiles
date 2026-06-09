@@ -52,5 +52,5 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Validate JSON files
         run: |
-          jq empty themes/catppuccin_mocha.omp.json
+          jq empty stow/omp/.config/omp/catppuccin_mocha.omp.json
           jq empty windows/settings.json

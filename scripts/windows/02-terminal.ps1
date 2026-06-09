@@ -22,7 +22,7 @@ $ompConfigDir = "$HOME\.config\omp"
 if (!(Test-Path -Path $ompConfigDir)) {
     $null = New-Item -ItemType Directory -Path $ompConfigDir -Force
 }
-Copy-Item -Path "$dotfilesDir\themes\catppuccin_mocha.omp.json" -Destination "$ompConfigDir\catppuccin_mocha.omp.json" -Force
+Copy-Item -Path "$dotfilesDir\stow\omp\.config\omp\catppuccin_mocha.omp.json" -Destination "$ompConfigDir\catppuccin_mocha.omp.json" -Force
 Write-Host "Tema local instalado." -ForegroundColor Green
 
 Write-Host "`n[*] Restaurando configuración de Windows Terminal y fondo de pantalla..." -ForegroundColor Yellow

@@ -7,8 +7,8 @@ _DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$_DIR/env.sh"
 
 echo -e "\n\e[33m[*] Restaurando configuración de Neovim (LazyVim)...\e[0m"
-if [ -d "$DIR/nvim" ]; then
-    if [ -d "$HOME/.config/nvim" ]; then
+if [ -d "$DIR/stow/nvim/.config/nvim" ]; then
+    if [ -d "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
         if [ ! -d "$HOME/.config/nvim.bak" ]; then
             echo "Realizando backup de configuración local de Neovim..."
             mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
@@ -16,9 +16,12 @@ if [ -d "$DIR/nvim" ]; then
             echo "Backup de Neovim ya existe. Reemplazando configuración local."
             rm -rf "$HOME/.config/nvim"
         fi
+    elif [ -L "$HOME/.config/nvim" ]; then
+        rm -f "$HOME/.config/nvim"
     fi
-    cp -r "$DIR/nvim" "$HOME/.config/nvim"
-    echo "Configuración de Neovim (LazyVim) restaurada desde dotfiles."
+    mkdir -p "$HOME/.config"
+    stow -d "$DIR/stow" -t "$HOME" nvim
+    echo "Configuración de Neovim (LazyVim) vinculada vía stow."
 else
     echo -e "\e[33m[ADVERTENCIA] No se encontró el directorio nvim en el repositorio.\e[0m"
 fi
