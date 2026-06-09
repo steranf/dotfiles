@@ -1,10 +1,10 @@
 # install.ps1 - Menú Maestro de Instalación (Windows)
-$ErrorActionPreference = 'Stop'
-
 param (
     [switch]$All,
     [switch]$SkipWSL   # Omite WSL y Microsoft Store (uso en CI)
 )
+
+$ErrorActionPreference = 'Stop'
 
 function Invoke-FullInstall {
     & "$PSScriptRoot\scripts\windows\01-core.ps1" -SkipWSL:$SkipWSL
