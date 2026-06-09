@@ -7,6 +7,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [1.0.2] — 2026-06-08
+
 ### Added
 - `update.ps1` para Windows: actualiza Oh My Posh (winget), módulos PS (Terminal-Icons, PSFzf) y dotfiles (`git pull`)
 - `SECURITY.md` con política de reporte de vulnerabilidades y tiempos de respuesta
@@ -63,6 +67,7 @@ Primera versión pública.
 - Supply chain warning automático en PRs de actualización de versiones
 - Eliminado blob binario de 614 KB del historial de git con `git filter-repo`
 
-[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/steranf/dotfiles/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/steranf/dotfiles/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/steranf/dotfiles/releases/tag/v1.0.0
