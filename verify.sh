@@ -96,8 +96,11 @@ fi
 if [ -x "$HOME/.pyenv/bin/pyenv" ]; then
     pyenv_ver=$("$HOME/.pyenv/bin/pyenv" --version 2>/dev/null | awk '{print $2}')
     echo -e "\e[32m[✓] Pyenv\e[0m - Encontrado ($pyenv_ver)"
+elif command -v pyenv >/dev/null 2>&1; then
+    pyenv_ver=$(pyenv --version 2>/dev/null | awk '{print $2}')
+    echo -e "\e[32m[✓] Pyenv\e[0m - Encontrado vía PATH ($pyenv_ver)"
 else
-    echo -e "\e[31m[x] Pyenv\e[0m - NO ENCONTRADO (~/.pyenv/bin/pyenv ausente)"
+    echo -e "\e[31m[x] Pyenv\e[0m - NO ENCONTRADO"
     errors+=1
 fi
 
