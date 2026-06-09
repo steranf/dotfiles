@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Run ShellCheck
-        run: shellcheck install.sh verify.sh update.sh bootstrap.sh uninstall.sh scripts/linux/*.sh
+        run: shellcheck install.sh verify.sh update.sh bootstrap.sh uninstall.sh scripts/linux/*.sh scripts/macos/*.sh
 
   lint-powershell:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       - name: Run shfmt
         uses: mvdan/shfmt/gha@v3
         with:
-          args: --diff --indent 4 install.sh update.sh verify.sh uninstall.sh bootstrap.sh scripts/linux/env.sh scripts/linux/01-core.sh scripts/linux/02-github.sh scripts/linux/03-shell.sh scripts/linux/04-neovim.sh scripts/linux/99-restore.sh
+          args: --diff --indent 4 install.sh update.sh verify.sh uninstall.sh bootstrap.sh scripts/linux/env.sh scripts/linux/01-core.sh scripts/linux/02-github.sh scripts/linux/03-shell.sh scripts/linux/04-neovim.sh scripts/linux/99-restore.sh scripts/macos/01-core.sh scripts/macos/03-shell.sh scripts/macos/04-neovim.sh scripts/macos/05-dev.sh scripts/macos/99-restore.sh
 
   lint-json:
     runs-on: ubuntu-latest

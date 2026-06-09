@@ -2,6 +2,7 @@
 # uninstall.sh - Purga completa del entorno instalado por dotfiles.
 # Revierte configs, elimina binarios, Oh My Zsh, NVM y Pyenv.
 set -euo pipefail
+OS="$(uname -s)"
 
 echo -e "\e[36m====================================================\e[0m"
 echo -e "\e[31m   TERMINAL NIVEL DIOS - DESINSTALADOR COMPLETO    \e[0m"
@@ -55,29 +56,43 @@ fi
 
 echo -e "\e[33m[*] Revirtiendo shell por defecto a bash...\e[0m"
 if command -v bash >/dev/null 2>&1; then
-    sudo usermod -s "$(command -v bash)" "$USER"
+    if [ "$OS" = "Darwin" ]; then
+        sudo chsh -s "$(command -v bash)" "$USER"
+    else
+        sudo usermod -s "$(command -v bash)" "$USER"
+    fi
     echo -e "  \e[32m[✓] Shell revertida a bash\e[0m"
 fi
 
-# --- 3. Binarios de GitHub Releases ---
+# --- 3. Herramientas instaladas ---
 
-echo -e "\e[33m[*] Eliminando binarios de GitHub Releases...\e[0m"
-_MANIFEST="$HOME/.local/share/dotfiles-manager/github-binaries"
-if [ -f "$_MANIFEST" ]; then
-    while IFS= read -r _bin; do
-        if [ -f "/usr/local/bin/${_bin}" ]; then
-            sudo rm -f "/usr/local/bin/${_bin}"
-            echo -e "  \e[32m[✓] Eliminado: /usr/local/bin/${_bin}\e[0m"
-        fi
-    done <"$_MANIFEST"
-    rm -rf "$HOME/.local/share/dotfiles-manager"
-else
-    for _bin in oh-my-posh eza lazygit fastfetch nvim; do
-        if [ -f "/usr/local/bin/${_bin}" ]; then
-            sudo rm -f "/usr/local/bin/${_bin}"
-            echo -e "  \e[32m[✓] Eliminado: /usr/local/bin/${_bin}\e[0m"
+if [ "$OS" = "Darwin" ]; then
+    echo -e "\e[33m[*] Desinstalando herramientas (Homebrew)...\e[0m"
+    for _tool in oh-my-posh eza lazygit fastfetch neovim; do
+        if brew list "$_tool" &>/dev/null 2>&1; then
+            brew uninstall "$_tool" && echo -e "  \e[32m[✓] Desinstalado: $_tool\e[0m"
         fi
     done
+    brew untap jandedobbeleer/oh-my-posh 2>/dev/null || true
+else
+    echo -e "\e[33m[*] Eliminando binarios de GitHub Releases...\e[0m"
+    _MANIFEST="$HOME/.local/share/dotfiles-manager/github-binaries"
+    if [ -f "$_MANIFEST" ]; then
+        while IFS= read -r _bin; do
+            if [ -f "/usr/local/bin/${_bin}" ]; then
+                sudo rm -f "/usr/local/bin/${_bin}"
+                echo -e "  \e[32m[✓] Eliminado: /usr/local/bin/${_bin}\e[0m"
+            fi
+        done <"$_MANIFEST"
+        rm -rf "$HOME/.local/share/dotfiles-manager"
+    else
+        for _bin in oh-my-posh eza lazygit fastfetch nvim; do
+            if [ -f "/usr/local/bin/${_bin}" ]; then
+                sudo rm -f "/usr/local/bin/${_bin}"
+                echo -e "  \e[32m[✓] Eliminado: /usr/local/bin/${_bin}\e[0m"
+            fi
+        done
+    fi
 fi
 
 # --- 4. Oh My Zsh ---

@@ -119,6 +119,7 @@ Elimina binarios, Oh My Zsh, NVM, Pyenv y revierte configs a su estado original.
 | Plataforma | Estado |
 |---|---|
 | Windows 11 + WSL2 (AlmaLinux 9) | ✅ Oficial |
+| macOS (Intel + Apple Silicon) | ✅ Soportado vía Homebrew |
 | Ubuntu / Debian en WSL2 | ⚠️ Binarios OK · paquetes base requieren adaptar `01-core.sh` |
 | Linux nativo x86_64 / ARM64 | ⚠️ Binarios OK · paquetes base requieren adaptar `01-core.sh` |
 

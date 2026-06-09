@@ -52,31 +52,45 @@ echo -e "${CYAN}==========================================${NC}"
 echo ""
 
 # --- Avisos de entorno ---
+OS="$(uname -s)"
 if [ "$(id -u)" -eq 0 ]; then
     echo -e "${YELLOW}[!] Ejecutando como root. Se recomienda un usuario normal con sudo.${NC}"
 fi
 if [ -n "${WSL_DISTRO_NAME:-}" ]; then
     echo -e "${CYAN}[i] WSL detectado: ${WSL_DISTRO_NAME}${NC}"
 fi
+if [ "$OS" = "Darwin" ]; then
+    echo -e "${CYAN}[i] macOS detectado${NC}"
+fi
 echo ""
 
-# --- 1. Detectar gestor de paquetes ---
-if command -v dnf >/dev/null 2>&1; then
-    PKG_MGR="dnf"
-    PKG_INSTALL="sudo dnf install -y"
-elif command -v apt-get >/dev/null 2>&1; then
-    PKG_MGR="apt-get"
-    PKG_INSTALL="sudo apt-get install -y"
+# --- 1. Detectar entorno e instalar git ---
+if [ "$OS" = "Darwin" ]; then
+    # macOS: verificar Homebrew; git viene con Xcode CLT o brew
+    if ! command -v brew >/dev/null 2>&1; then
+        echo -e "${YELLOW}[!] Homebrew no encontrado. El instalador (01-core.sh) lo instalará.${NC}"
+        echo -e "${YELLOW}    Si git tampoco está disponible, instálalo con: xcode-select --install${NC}"
+    fi
+    if ! command -v git >/dev/null 2>&1; then
+        echo -e "${RED}[ERROR] git no encontrado. Instálalo con: xcode-select --install${NC}" >&2
+        exit 1
+    fi
 else
-    echo -e "${RED}[ERROR] No se encontró gestor de paquetes compatible (dnf / apt-get).${NC}" >&2
-    exit 1
-fi
-echo -e "${GREEN}[✓] Gestor de paquetes: ${PKG_MGR}${NC}"
-
-# --- 2. Instalar git si no está presente ---
-if ! command -v git >/dev/null 2>&1; then
-    echo -e "${YELLOW}[*] Instalando git...${NC}"
-    $PKG_INSTALL git
+    if command -v dnf >/dev/null 2>&1; then
+        PKG_MGR="dnf"
+        PKG_INSTALL="sudo dnf install -y"
+    elif command -v apt-get >/dev/null 2>&1; then
+        PKG_MGR="apt-get"
+        PKG_INSTALL="sudo apt-get install -y"
+    else
+        echo -e "${RED}[ERROR] No se encontró gestor de paquetes compatible (dnf / apt-get).${NC}" >&2
+        exit 1
+    fi
+    echo -e "${GREEN}[✓] Gestor de paquetes: ${PKG_MGR}${NC}"
+    if ! command -v git >/dev/null 2>&1; then
+        echo -e "${YELLOW}[*] Instalando git...${NC}"
+        $PKG_INSTALL git
+    fi
 fi
 echo -e "${GREEN}[✓] git $(git --version | awk '{print $3}')${NC}"
 
