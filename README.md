@@ -26,19 +26,19 @@ Dotfiles con instalador automatizado para **Windows 11 + WSL2 (AlmaLinux 9)**. P
 
 **Linux / WSL2:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/v1.0.1/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/v1.0.2/bootstrap.sh | bash
 ```
 
 **Windows — PowerShell como Administrador:**
 ```powershell
-irm https://raw.githubusercontent.com/steranf/dotfiles/v1.0.1/bootstrap.ps1 | iex
+irm https://raw.githubusercontent.com/steranf/dotfiles/v1.0.2/bootstrap.ps1 | iex
 ```
 
 El bootstrap instala `git` si no está presente, clona el repo y lanza el instalador. Desde cero hasta entorno completo en ~15 minutos.
 
 > **Modo desatendido** (sin menú, instala todo en silencio):
 > ```bash
-> curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/v1.0.1/bootstrap.sh | bash -s -- --all
+> curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/v1.0.2/bootstrap.sh | bash -s -- --all
 > ```
 
 ---
