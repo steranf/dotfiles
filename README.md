@@ -90,6 +90,12 @@ bash install.sh
 
 Ambos instaladores muestran un **menú interactivo** para instalar componentes individualmente o todo de una vez.
 
+**Desinstalar / limpiar completamente (Linux/WSL2):**
+```bash
+bash ~/dotfiles/uninstall.sh
+```
+Elimina binarios, Oh My Zsh, NVM, Pyenv y revierte configs a su estado original.
+
 ---
 
 ## ⌨️ Atajos de teclado
