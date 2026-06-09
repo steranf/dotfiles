@@ -62,3 +62,9 @@ sudo cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/
 sudo chown root:root /usr/local/bin/nvim
 [ -d /usr/local/lib/nvim ]   && sudo chown -R root:root /usr/local/lib/nvim
 [ -d /usr/local/share/nvim ] && sudo chown -R root:root /usr/local/share/nvim
+
+# Registrar binarios instalados para rollback seguro
+_MANIFEST_DIR="$HOME/.local/share/dotfiles-manager"
+mkdir -p "$_MANIFEST_DIR"
+printf '%s\n' "oh-my-posh" "eza" "lazygit" "fastfetch" "nvim" > "$_MANIFEST_DIR/github-binaries"
+echo -e "\e[32m[✓] Manifiesto de instalación guardado en ${_MANIFEST_DIR}/github-binaries\e[0m"

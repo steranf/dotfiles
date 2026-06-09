@@ -9,7 +9,9 @@ CHANGED=false
 # --- Helpers ---
 
 gh_latest() {
-    gh api "repos/$1/releases/latest" --jq '.tag_name'
+    local tag
+    tag=$(gh api "repos/$1/releases/latest" --jq '.tag_name' 2>/dev/null) || true
+    printf '%s' "$tag"
 }
 
 sha256_of_url() {
@@ -21,12 +23,21 @@ current_var() {
 }
 
 set_var() {
-    sed -i "s|^export $1=.*|export $1=\"$2\"|" "$ENV_FILE"
+    local key="$1" val
+    # Escapa caracteres especiales del delimitador y replacement de sed
+    val=$(printf '%s' "$2" | sed 's/[\\|&]/\\&/g')
+    sed -i "s|^export ${key}=.*|export ${key}=\"${val}\"|" "$ENV_FILE"
 }
 
 bump() {
     local name="$1" latest_stored="$2" url_amd64="$3" url_arm64="$4"
     local current
+
+    if [ -z "$latest_stored" ]; then
+        echo "  [!] $name: no se pudo obtener la versión desde la API, omitiendo."
+        return 0
+    fi
+
     current=$(current_var "${name}_VERSION")
 
     if [ "$current" = "$latest_stored" ]; then

@@ -22,7 +22,13 @@ if (-not $Headless) {
     $choice = Read-Host "  Aceptar recomendacion? [S/n]"
     if ($choice -eq 'n' -or $choice -eq 'N') {
         $wslRAM = Read-Host "  Memoria para WSL2 (ej: 8GB)"
+        if ($wslRAM -notmatch '^\d+GB$') {
+            throw "Formato inválido para memoria. Use un número seguido de GB (ej: 8GB)."
+        }
         $wslCPU = Read-Host "  Procesadores (ej: 4)"
+        if ($wslCPU -notmatch '^\d+$' -or [int]$wslCPU -lt 1 -or [int]$wslCPU -gt 128) {
+            throw "Formato inválido para procesadores. Use un número entero (1-128)."
+        }
     } else {
         $wslRAM = "${recRAM}GB"
         $wslCPU = "$recCPU"

@@ -14,7 +14,15 @@ fi
 
 echo -e "\n\e[33m[*] Instalando Oh My Zsh y plugins...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+    git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+    actual_omz=$(git -C "$HOME/.oh-my-zsh" rev-parse HEAD)
+    if [ "$actual_omz" != "$ZSH_OMZ_COMMIT" ]; then
+        echo -e "\e[31m[ERROR] Oh My Zsh commit no coincide con el pin de seguridad.\e[0m"
+        echo -e "  Esperado: $ZSH_OMZ_COMMIT\n  Obtenido: $actual_omz"
+        rm -rf "$HOME/.oh-my-zsh"
+        exit 1
+    fi
+    echo -e "\e[32m[✓] Oh My Zsh commit verificado.\e[0m"
 fi
 if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
     git clone --branch "$ZSH_AUTOSUGGESTIONS_VERSION" --depth 1 https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions

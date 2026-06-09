@@ -6,12 +6,15 @@ _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$_DIR/env.sh"
 
 echo -e "\n\e[33m[*] Instalando NVM y Pyenv...\e[0m"
-NVM_INSTALL_VERSION="v0.40.5"
 PYENV_VERSION="v2.7.1"
 
 if [ ! -d "$HOME/.nvm" ]; then
     echo "Instalando NVM (${NVM_INSTALL_VERSION})..."
-    curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh" | bash
+    _NVM_TMP=$(mktemp)
+    curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh" -o "$_NVM_TMP"
+    verify_sha256 "$_NVM_TMP" "$NVM_SHA256"
+    bash "$_NVM_TMP"
+    rm -f "$_NVM_TMP"
 else
     echo "NVM ya instalado, omitiendo."
 fi
