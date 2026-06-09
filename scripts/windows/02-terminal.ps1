@@ -5,7 +5,9 @@ $dotfilesDir = Resolve-Path "$PSScriptRoot\..\.." | Select-Object -ExpandPropert
 
 Write-Host "`n[*] Restaurando perfil de PowerShell..." -ForegroundColor Yellow
 if (Test-Path -Path $PROFILE) {
-    Copy-Item -Path $PROFILE -Destination "$PROFILE.bak" -Force
+    if (!(Test-Path "$PROFILE.bak")) {
+        Copy-Item -Path $PROFILE -Destination "$PROFILE.bak"
+    }
 } else {
     $null = New-Item -ItemType File -Path $PROFILE -Force
 }
