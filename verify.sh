@@ -47,6 +47,26 @@ echo -e "\n\e[33m--- Herramientas Core ---\e[0m"
 check_tool "zsh" "Zsh Shell" || errors+=1
 check_tool "pwsh.exe" "PowerShell (Windows)" || check_tool "pwsh" "PowerShell (Linux)" || echo -e "\e[33m[!] PowerShell no detectado en el PATH de WSL\e[0m"
 
+echo -e "\n\e[33m--- Oh My Zsh ---\e[0m"
+
+if [ -d "$HOME/.oh-my-zsh" ]; then
+    omz_commit=$(git -C "$HOME/.oh-my-zsh" rev-parse --short HEAD 2>/dev/null || echo "desconocido")
+    echo -e "\e[32m[✓] Oh My Zsh\e[0m - Encontrado (commit ${omz_commit})"
+else
+    echo -e "\e[31m[x] Oh My Zsh\e[0m - NO ENCONTRADO (~/.oh-my-zsh ausente)"
+    errors+=1
+fi
+
+for plugin in zsh-autosuggestions zsh-syntax-highlighting; do
+    plugin_dir="$HOME/.oh-my-zsh/custom/plugins/$plugin"
+    if [ -d "$plugin_dir" ]; then
+        echo -e "\e[32m[✓] Plugin: $plugin\e[0m - Encontrado"
+    else
+        echo -e "\e[31m[x] Plugin: $plugin\e[0m - NO ENCONTRADO ($plugin_dir ausente)"
+        errors+=1
+    fi
+done
+
 echo -e "\n\e[33m--- Utilidades de Terminal ---\e[0m"
 check_tool "oh-my-posh" "Oh My Posh" || errors+=1
 check_tool "fastfetch" "Fastfetch" || errors+=1
