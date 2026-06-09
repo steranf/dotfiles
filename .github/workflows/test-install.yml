@@ -59,6 +59,13 @@ jobs:
         shell: pwsh
         run: .\install.ps1 -All -SkipWSL
 
+      - name: Refrescar PATH (winget actualiza el registro, no el proceso actual)
+        shell: pwsh
+        run: |
+          $machine = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+          $user    = [System.Environment]::GetEnvironmentVariable("Path", "User")
+          "$machine;$user" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+
       - name: Verificar instalación
         shell: pwsh
         run: .\verify.ps1 -SkipWSL
