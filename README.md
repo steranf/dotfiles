@@ -74,5 +74,20 @@ Reinicia tu terminal o escribe `zsh` al finalizar.
 
 ---
 
-## 📚 Manuales de Uso
-Dentro de la carpeta `docs/` encontrarás manuales detallados de cómo sacar provecho a los atajos de teclado y funcionalidades tanto en Windows como en AlmaLinux.
+## 📚 Referencia Rápida de Atajos
+
+| Atajo / Comando | Acción |
+|---|---|
+| `Ctrl+R` | Búsqueda en historial con FZF |
+| `Ctrl+T` | Búsqueda de archivos con FZF |
+| `z <nombre>` | Navegar a directorio frecuente (Zoxide) |
+| `lg` | Abrir LazyGit (TUI de Git) |
+| `gs` / `ga` / `gcm` | `git status` / `git add` / `git commit -m` |
+| `ll` / `la` | Listado detallado con iconos (Eza) |
+| `c <archivo>` | Ver archivo con sintaxis coloreada (Bat) |
+| `ports` | Ver puertos en escucha |
+| `nvim` | Abrir editor (LazyVim) |
+
+## 📄 Licencia
+
+MIT — consulta [LICENSE](LICENSE) para más detalles.
