@@ -32,20 +32,20 @@ Este repositorio contiene un entorno de desarrollo de **Nivel Ingeniería (Infra
 
 **Linux / WSL2 (AlmaLinux 9, Ubuntu, Debian):**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/v1.0.0/bootstrap.sh | bash
 ```
 
 **Windows — Abre PowerShell como Administrador:**
 ```powershell
-irm https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.ps1 | iex
+irm https://raw.githubusercontent.com/steranf/dotfiles/v1.0.0/bootstrap.ps1 | iex
 ```
 
 **Modo totalmente desatendido** (sin menú, instala todo automáticamente):
 ```bash
 # Linux
-curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.sh | bash -s -- --all
+curl -fsSL https://raw.githubusercontent.com/steranf/dotfiles/v1.0.0/bootstrap.sh | bash -s -- --all
 # Windows
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/steranf/dotfiles/main/bootstrap.ps1))) -All
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/steranf/dotfiles/v1.0.0/bootstrap.ps1))) -All
 ```
 
 ---
