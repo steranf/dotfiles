@@ -26,6 +26,14 @@ Este repositorio contiene un entorno de desarrollo de **Nivel Ingeniería (Infra
 
 ---
 
+## 📦 Release Estable
+
+[![GitHub release](https://img.shields.io/github/v/release/steranf/dotfiles?label=release&color=brightgreen)](https://github.com/steranf/dotfiles/releases/tag/v1.0.0)
+
+> Última versión estable: **[v1.0.0](https://github.com/steranf/dotfiles/releases/tag/v1.0.0)**
+
+---
+
 ## ⚡ Instalación Rápida (Bootstrap)
 
 > Solo necesitas una terminal abierta. El bootstrap instala `git` si no está presente, clona el repo y lanza el instalador interactivo.
