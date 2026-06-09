@@ -3,7 +3,7 @@
 
 # Directorio raíz del repositorio (resolviendo desde scripts/linux)
 export DIR
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." &> /dev/null && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." &>/dev/null && pwd)"
 
 # --- Versiones y checksums (actualizados automáticamente por update-versions.yml) ---
 export OMP_VERSION="v25.0.0"
@@ -38,7 +38,7 @@ export ARCH
 ARCH=$(uname -m)
 
 if [ "$ARCH" = "x86_64" ]; then
-    export OMP_ARCH="amd64"      EZA_ARCH="x86_64"  LAZYGIT_ARCH="x86_64"
+    export OMP_ARCH="amd64" EZA_ARCH="x86_64" LAZYGIT_ARCH="x86_64"
     export FASTFETCH_ARCH="amd64" NVIM_ARCH="x86_64"
     export OMP_SHA256="$OMP_SHA256_AMD64"
     export EZA_SHA256="$EZA_SHA256_AMD64"
@@ -46,7 +46,7 @@ if [ "$ARCH" = "x86_64" ]; then
     export FASTFETCH_SHA256="$FASTFETCH_SHA256_AMD64"
     export NVIM_SHA256="$NVIM_SHA256_AMD64"
 elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-    export OMP_ARCH="arm64"       EZA_ARCH="aarch64" LAZYGIT_ARCH="arm64"
+    export OMP_ARCH="arm64" EZA_ARCH="aarch64" LAZYGIT_ARCH="arm64"
     export FASTFETCH_ARCH="aarch64" NVIM_ARCH="arm64"
     export OMP_SHA256="$OMP_SHA256_ARM64"
     export EZA_SHA256="$EZA_SHA256_ARM64"

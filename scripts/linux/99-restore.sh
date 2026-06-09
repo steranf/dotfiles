@@ -2,7 +2,7 @@
 set -euo pipefail
 trap 'echo -e "\e[31m[ERROR] Script falló en la línea $LINENO\e[0m"' ERR
 
-_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=scripts/linux/env.sh
 source "$_DIR/env.sh"
 
@@ -35,7 +35,7 @@ _MANIFEST="$HOME/.local/share/dotfiles-manager/github-binaries"
 if [ -f "$_MANIFEST" ]; then
     while IFS= read -r _bin; do
         [ -f "/usr/local/bin/${_bin}" ] && sudo rm -f "/usr/local/bin/${_bin}" && echo "  [OK] Eliminado: /usr/local/bin/${_bin}"
-    done < "$_MANIFEST"
+    done <"$_MANIFEST"
     rm -f "$_MANIFEST"
     echo -e "\e[32m[OK] Ejecutables de GitHub Releases eliminados (vía manifiesto).\e[0m"
 else

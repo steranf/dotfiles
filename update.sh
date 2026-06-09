@@ -4,7 +4,7 @@
 # install.sh y ejecuta la opción [3] del instalador interactivo.
 set -euo pipefail
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 ENV_FILE="$DIR/scripts/linux/env.sh"
 
 echo -e "\e[36m==========================================\e[0m"

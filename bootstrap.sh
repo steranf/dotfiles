@@ -8,8 +8,12 @@ set -euo pipefail
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # --- Colores ---
-RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'
-CYAN='\e[36m'; MAGENTA='\e[35m'; NC='\e[0m'
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+CYAN='\e[36m'
+MAGENTA='\e[35m'
+NC='\e[0m'
 
 # --- Defaults ---
 REPO_URL="https://github.com/steranf/dotfiles.git"
@@ -19,16 +23,24 @@ PASSTHROUGH_ARGS=""
 # --- Argumentos (compatibles con pipe: bash -s -- --flag) ---
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --dir)  DOTFILES_DIR="$2"; shift 2 ;;
-        --all)  PASSTHROUGH_ARGS="--all"; shift ;;
-        -h|--help)
-            echo "Uso: curl -fsSL URL | bash -s -- [--dir PATH] [--all]"
-            echo "  --dir PATH  Directorio de destino (default: ~/dotfiles)"
-            echo "  --all       Modo desatendido: salta el menú y lo instala todo"
-            exit 0 ;;
-        *)
-            echo -e "${RED}[ERROR] Opción desconocida: $1${NC}" >&2
-            exit 1 ;;
+    --dir)
+        DOTFILES_DIR="$2"
+        shift 2
+        ;;
+    --all)
+        PASSTHROUGH_ARGS="--all"
+        shift
+        ;;
+    -h | --help)
+        echo "Uso: curl -fsSL URL | bash -s -- [--dir PATH] [--all]"
+        echo "  --dir PATH  Directorio de destino (default: ~/dotfiles)"
+        echo "  --all       Modo desatendido: salta el menú y lo instala todo"
+        exit 0
+        ;;
+    *)
+        echo -e "${RED}[ERROR] Opción desconocida: $1${NC}" >&2
+        exit 1
+        ;;
     esac
 done
 

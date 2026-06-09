@@ -14,19 +14,19 @@ check_tool() {
     # Verifica si el comando existe
     if command -v "$tool" >/dev/null 2>&1; then
         case "$tool" in
-            "zsh") version=$(zsh --version 2>/dev/null | awk '{print $2}') ;;
-            "pwsh.exe") version=$(pwsh.exe --version 2>/dev/null | sed 's/PowerShell //') ;;
-            "pwsh") version=$(pwsh --version 2>/dev/null | sed 's/PowerShell //') ;;
-            "oh-my-posh") version=$(oh-my-posh --version 2>/dev/null) ;;
-            "fastfetch") version=$(fastfetch --version 2>/dev/null | awk '{print $2}') ;;
-            "lazygit") version=$(lazygit --version 2>/dev/null | awk '{print $6}' | tr -d 'v,') ;;
-            "fzf") version=$(fzf --version 2>/dev/null | awk '{print $1}') ;;
-            "zoxide") version=$(zoxide --version 2>/dev/null | awk '{print $2}') ;;
-            "bat"|"batcat") version=$($tool --version 2>/dev/null | awk '{print $2}') ;;
-            "eza") version=$(eza --version 2>/dev/null | grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1) ;;
-            "nvim") version=$(nvim --version 2>/dev/null | head -1 | awk '{print $2}') ;;
-            "rg") version=$(rg --version 2>/dev/null | head -1 | awk '{print $2}') ;;
-            "fd"|"fdfind") version=$($tool --version 2>/dev/null | awk '{print $NF}') ;;
+        "zsh") version=$(zsh --version 2>/dev/null | awk '{print $2}') ;;
+        "pwsh.exe") version=$(pwsh.exe --version 2>/dev/null | sed 's/PowerShell //') ;;
+        "pwsh") version=$(pwsh --version 2>/dev/null | sed 's/PowerShell //') ;;
+        "oh-my-posh") version=$(oh-my-posh --version 2>/dev/null) ;;
+        "fastfetch") version=$(fastfetch --version 2>/dev/null | awk '{print $2}') ;;
+        "lazygit") version=$(lazygit --version 2>/dev/null | awk '{print $6}' | tr -d 'v,') ;;
+        "fzf") version=$(fzf --version 2>/dev/null | awk '{print $1}') ;;
+        "zoxide") version=$(zoxide --version 2>/dev/null | awk '{print $2}') ;;
+        "bat" | "batcat") version=$($tool --version 2>/dev/null | awk '{print $2}') ;;
+        "eza") version=$(eza --version 2>/dev/null | grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1) ;;
+        "nvim") version=$(nvim --version 2>/dev/null | head -1 | awk '{print $2}') ;;
+        "rg") version=$(rg --version 2>/dev/null | head -1 | awk '{print $2}') ;;
+        "fd" | "fdfind") version=$($tool --version 2>/dev/null | awk '{print $NF}') ;;
         esac
 
         if [ -n "$version" ]; then

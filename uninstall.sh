@@ -69,7 +69,7 @@ if [ -f "$_MANIFEST" ]; then
             sudo rm -f "/usr/local/bin/${_bin}"
             echo -e "  \e[32m[✓] Eliminado: /usr/local/bin/${_bin}\e[0m"
         fi
-    done < "$_MANIFEST"
+    done <"$_MANIFEST"
     rm -rf "$HOME/.local/share/dotfiles-manager"
 else
     for _bin in oh-my-posh eza lazygit fastfetch nvim; do
