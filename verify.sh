@@ -27,6 +27,7 @@ check_tool() {
         "nvim") version=$(nvim --version 2>/dev/null | head -1 | awk '{print $2}') ;;
         "rg") version=$(rg --version 2>/dev/null | head -1 | awk '{print $2}') ;;
         "fd" | "fdfind") version=$($tool --version 2>/dev/null | awk '{print $NF}') ;;
+        "stow") version=$(stow --version 2>/dev/null | awk 'NR==1{print $NF}') ;;
         esac
 
         if [ -n "$version" ]; then
@@ -45,6 +46,7 @@ declare -i errors=0
 
 echo -e "\n\e[33m--- Herramientas Core ---\e[0m"
 check_tool "zsh" "Zsh Shell" || errors+=1
+check_tool "stow" "GNU Stow" || errors+=1
 check_tool "pwsh.exe" "PowerShell (Windows)" || check_tool "pwsh" "PowerShell (Linux)" || echo -e "\e[33m[!] PowerShell no detectado en el PATH de WSL\e[0m"
 
 echo -e "\n\e[33m--- Oh My Zsh ---\e[0m"
@@ -77,7 +79,7 @@ check_tool "bat" "Bat (o Batcat)" || check_tool "batcat" "Bat (o Batcat)" || err
 check_tool "eza" "Eza (Listados)" || errors+=1
 check_tool "nvim" "Neovim" || errors+=1
 check_tool "rg" "Ripgrep" || errors+=1
-check_tool "fd" "Fd" || check_tool "fdfind" "Fd" || errors+=1
+check_tool "fd" "Fd-find" || check_tool "fdfind" "Fd-find" || errors+=1
 
 echo -e "\n\e[33m--- Gestores de Versiones ---\e[0m"
 
