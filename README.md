@@ -10,6 +10,18 @@ Dotfiles con instalador automatizado para **Windows 11 + WSL2 (AlmaLinux 9)**. P
 
 ---
 
+## 📸 Vista previa
+
+<p align="center">
+  <img src="assets/screenshots/zsh.png" width="100%" alt="Zsh con Oh My Posh tema Catppuccin Mocha, eza y Fastfetch">
+</p>
+<p align="center">
+  <img src="assets/screenshots/neovim.png" width="49%" alt="Neovim con LazyVim">
+  <img src="assets/screenshots/lazygit.png" width="49%" alt="LazyGit TUI">
+</p>
+
+---
+
 ## ⚡ Un solo comando para empezar
 
 **Linux / WSL2:**
