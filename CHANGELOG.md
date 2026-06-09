@@ -9,6 +9,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## [1.0.3] — 2026-06-09
+
+### Added
+- **GNU Stow**: dotfiles gestionados como symlinks via `stow/`; 4 paquetes (`zsh`, `git`, `omp`, `nvim`). Los scripts de instalación Linux y macOS usan `stow` en lugar de `cp`. Los scripts de restore agregan `stow -D` para desvincular limpiamente.
+- **`uninstall.sh`**: desinstalador completo (binarios, OMZ, NVM, Pyenv, configs). Integra `stow -D` si stow está disponible.
+- **CI — Test de instalación Docker**: workflow `test-install.yml` ejecuta `install.sh --all` + `verify.sh` en Ubuntu 24.04 y AlmaLinux 9.
+- **CI — shfmt**: validación de formato Bash consistente en todos los scripts (indentación 4 espacios).
+- **Soporte macOS + Homebrew**: `scripts/macos/` con `01-core.sh` (Homebrew), `03-shell.sh`, `04-neovim.sh`, `05-dev.sh` y `99-restore.sh`. `install.sh` detecta `uname -s` y despacha al stack correcto.
+
+### Fixed
+- `dnf install` en AlmaLinux 9: añadido `--allowerasing` para resolver el conflicto entre `curl-minimal` (preinstalado en el contenedor) y `curl`.
+
+---
+
 ## [1.0.2] — 2026-06-08
 
 ### Added
@@ -67,7 +81,8 @@ Primera versión pública.
 - Supply chain warning automático en PRs de actualización de versiones
 - Eliminado blob binario de 614 KB del historial de git con `git filter-repo`
 
-[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/steranf/dotfiles/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/steranf/dotfiles/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/steranf/dotfiles/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/steranf/dotfiles/releases/tag/v1.0.0
