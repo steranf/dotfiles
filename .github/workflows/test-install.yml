@@ -16,6 +16,7 @@ on:
       - 'scripts/macos/**'
       - 'scripts/windows/**'
       - 'stow/**'
+      - '.github/workflows/test-install.yml'
   workflow_dispatch:
 
 jobs:

@@ -9,6 +9,23 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## [1.0.5] — 2026-06-09
+
+### Added
+- CI Windows: job `Windows (winget)` en `test-install.yml`; cubre `install.ps1 -All -SkipWSL` + `verify.ps1 -SkipWSL` en `windows-latest`. PATH refrescado desde registro entre instalación y verificación.
+- `install.ps1` / `scripts/windows/01-core.ps1`: flag `-SkipWSL` omite WSL, Microsoft Store y la actualización de PowerShell en ejecución (incompatibles en CI).
+- `verify.ps1`: flag `-SkipWSL` omite la verificación de WSL y muestra `[~] WSL - Omitido (CI)`.
+- `test-install.yml`: `.github/workflows/test-install.yml` añadido a los triggers de `paths:` para que cambios al propio workflow lo disparen.
+
+### Changed
+- Versiones de herramientas actualizadas en `scripts/linux/env.sh`: Oh My Posh v25→v29.14.0, Eza v0.20.2→v0.23.4, LazyGit 0.48.0→0.62.2, Fastfetch 2.38.0→2.64.2 (con SHA256 actualizados).
+- `update.sh`: soporte macOS vía Homebrew (`brew upgrade` en loop para 5 herramientas). Fix de portabilidad de `sed -i` (macOS requiere `sed -i ''`; resuelto con patrón de archivo temporal).
+
+### Fixed
+- `uninstall.sh`: texto informativo actualizado para mencionar la eliminación de symlinks de GNU Stow.
+
+---
+
 ## [1.0.4] — 2026-06-09
 
 ### Added
@@ -98,7 +115,8 @@ Primera versión pública.
 - Supply chain warning automático en PRs de actualización de versiones
 - Eliminado blob binario de 614 KB del historial de git con `git filter-repo`
 
-[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/steranf/dotfiles/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/steranf/dotfiles/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/steranf/dotfiles/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/steranf/dotfiles/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/steranf/dotfiles/compare/v1.0.1...v1.0.2
